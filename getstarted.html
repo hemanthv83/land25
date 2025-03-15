@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Land Registration</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            padding: 0;
+        }
+
+        .nav-links li {
+            margin-left: 20px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #f4f4f4;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 8px 15px;
+            background: #f39c12;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #e67e22;
+        }
+
+        .form-section {
+            background: white;
+            padding: 20px;
+            max-width: 500px;
+            margin: 70px auto;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        canvas {
+            border: 1px solid black;
+            width: 100%;
+            height: 150px;
+            margin-top: 10px;
+        }
+
+        .hidden {
+            display: none;
+            color: green;
+            margin-top: 10px;
+        }
+
+        /* Video styling */
+        #videoContainer {
+            margin: 15px 0;
+        }
+
+        #videoElement {
+            width: 100%;
+            height: 300px;
+            background-color: #000;
+            border-radius: 5px;
+        }
+
+        .video-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .video-timer {
+            font-size: 14px;
+            margin-top: 5px;
+            color: #666;
+        }
+
+        .recording-indicator {
+            display: none;
+            color: red;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        
+        /* New styles for location info */
+        .location-info {
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            font-size: 12px;
+            text-align: left;
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
+        
+        #videoWrapper {
+            position: relative;
+        }
+        
+        .location-status {
+            margin-top: 5px;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+        
+        .status-success {
+            background-color: #27ae60;
+            color: white;
+        }
+        
+        .status-error {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        /* Sentiment Analysis Styling */
+        .sentiment-container {
+            margin-top: 15px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .sentiment-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .emotion-bar {
+            height: 20px;
+            margin: 5px 0;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            background-color: #eee;
+        }
+
+        .emotion-fill {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            padding-left: 5px;
+            color: white;
+            font-size: 12px;
+            transition: width 0.3s ease;
+        }
+
+        .emotion-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+        }
+
+        .sentiment-summary {
+            margin-top: 10px;
+            padding: 5px;
+            border-radius: 3px;
+            text-align: center;
+        }
+
+        .positive-summary {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .neutral-summary {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .negative-summary {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        #faceDetectionCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 300px;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <nav class="container">
+        <div class="logo">
+            <img src="/api/placeholder/40/40" alt="Logo"> Digital Land Registry
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#process">Process</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="login.html" class="btn">Login/Register</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section class="hero" id="home">
+    <h1>Digital Land Registration Portal</h1>
+    <p>Register your land online with our secure, efficient, and paperless process.</p>
+    <a href="#registrationForm" class="btn" id="getStartedBtn">Get Started</a>
+</section>
+
+<section id="registrationForm" class="form-section">
+    <h2>Land Registration Form</h2>
+    <form id="landForm">
+        <div id="videoContainer">
+            <label>Video Proof with Location Data:</label>
+            <div id="videoWrapper">
+                <video id="videoElement" autoplay muted></video>
+                <canvas id="faceDetectionCanvas"></canvas>
+                <div id="locationInfo" class="location-info">
+                    <div>Date & Time: <span id="datetime">Waiting...</span></div>
+                    <div>Location: <span id="gpsCoordinates">Waiting for GPS...</span></div>
+                    <div>Address: <span id="gpsAddress">Resolving address...</span></div>
+                </div>
+            </div>
+            <div id="locationStatus"></div>
+            <div class="video-controls">
+                <button type="button" id="startRecordBtn" class="btn">Record Video</button>
+                <button type="button" id="stopRecordBtn" class="btn" disabled>Stop Recording</button>
+                <span id="recordingIndicator" class="recording-indicator">● Recording</span>
+            </div>
+            <div class="video-timer" id="recordingTimer">00:00</div>
+
+            <!-- Video Sentiment Analysis Container -->
+            <div id="sentimentContainer" class="sentiment-container">
+                <div class="sentiment-title">Video AI Sentiment Analysis</div>
+                <div>
+                    <div class="emotion-label">
+                        <span>Happy</span>
+                        <span id="happyValue">0%</span>
+                    </div>
+                    <div class="emotion-bar">
+                        <div id="happyFill" class="emotion-fill" style="width: 0%; background-color: #28a745;"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="emotion-label">
+                        <span>Neutral</span>
+                        <span id="neutralValue">0%</span>
+                    </div>
+                    <div class="emotion-bar">
+                        <div id="neutralFill" class="emotion-fill" style="width: 0%; background-color: #ffc107;"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="emotion-label">
+                        <span>Sad</span>
+                        <span id="sadValue">0%</span>
+                    </div>
+                    <div class="emotion-bar">
+                        <div id="sadFill" class="emotion-fill" style="width: 0%; background-color: #dc3545;"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="emotion-label">
+                        <span>Angry</span>
+                        <span id="angryValue">0%</span>
+                    </div>
+                    <div class="emotion-bar">
+                        <div id="angryFill" class="emotion-fill" style="width: 0%; background-color: #6f42c1;"></div>
+                    </div>
+                </div>
+                <div id="sentimentSummary" class="sentiment-summary neutral-summary">
+                    Overall: Waiting for recording...
+                </div>
+            </div>
+        </div>
+        <label for="userRole">Select Role:</label>
+        <select id="userRole" required>
+            <option value="seller">Seller</option>
+            <option value="buyer">Buyer</option>
+        </select>
+
+        <label for="ownerName">Full Name:</label>
+        <input type="text" id="ownerName" required>
+
+        <label for="landLocation">Land Location:</label>
+        <input type="text" id="landLocation" required>
+
+        <label for="landSize">Land Size (in sq. meters):</label>
+        <input type="number" id="landSize" required>
+
+        <label for="feedback">Feedback (for text sentiment analysis):</label>
+        <input type="text" id="feedback" required>
+
+        <label>Draw Your Digital Signature:</label>
+        <canvas id="signatureCanvas"></canvas>
+        <button type="button" onclick="clearCanvas()" class="btn">Clear Signature</button>
+
+        <button type="submit" class="btn">Submit</button>
+    </form>
+    <p id="confirmationMessage" class="hidden">Your land registration has been submitted successfully!</p>
+</section>
+
+<!-- Load Face API -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/face-api.js/0.22.2/face-api.min.js"></script>
+
+<script>
+    const form = document.getElementById("landForm");
+    const message = document.getElementById("confirmationMessage");
+    const canvas = document.getElementById("signatureCanvas");
+    const ctx = canvas.getContext("2d");
+    const getStartedBtn = document.getElementById("getStartedBtn");
+    const videoElement = document.getElementById("videoElement");
+    const startRecordBtn = document.getElementById("startRecordBtn");
+    const stopRecordBtn = document.getElementById("stopRecordBtn");
+    const recordingIndicator = document.getElementById("recordingIndicator");
+    const recordingTimer = document.getElementById("recordingTimer");
+    const datetimeElement = document.getElementById("datetime");
+    const gpsCoordinatesElement = document.getElementById("gpsCoordinates");
+    const gpsAddressElement = document.getElementById("gpsAddress");
+    const locationStatusElement = document.getElementById("locationStatus");
+    const faceDetectionCanvas = document.getElementById("faceDetectionCanvas");
+    
+    let isDrawing = false;
+    let mediaRecorder;
+    let recordedChunks = [];
+    let stream;
+    let timerInterval;
+    let recordingTime = 0;
+    let locationUpdateInterval;
+    let currentPosition = null;
+    let faceDetectionInterval;
+    let isFaceAPILoaded = false;
+    let emotionData = {
+        happy: [],
+        neutral: [],
+        sad: [],
+        angry: []
+    };
+    
+    // Initialize canvas for signature
+    canvas.width = 500;
+    canvas.height = 150;
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "#000";
+    
+    canvas.addEventListener("mousedown", startDrawing);
+    canvas.addEventListener("touchstart", startDrawing);
+    
+    canvas.addEventListener("mouseup", stopDrawing);
+    canvas.addEventListener("touchend", stopDrawing);
+    
+    canvas.addEventListener("mousemove", draw);
+    canvas.addEventListener("touchmove", draw);
+    
+    function startDrawing(event) {
+        event.preventDefault();
+        isDrawing = true;
+        
+        const x = event.type.includes('mouse') ? event.offsetX : event.touches[0].clientX - canvas.getBoundingClientRect().left;
+        const y = event.type.includes('mouse') ? event.offsetY : event.touches[0].clientY - canvas.getBoundingClientRect().top;
+        
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+    }
+    
+    function stopDrawing() {
+        isDrawing = false;
+    }
+    
+    function draw(event) {
+        if (!isDrawing) return;
+        
+        event.preventDefault();
+        const x = event.type.includes('mouse') ? event.offsetX : event.touches[0].clientX - canvas.getBoundingClientRect().left;
+        const y = event.type.includes('mouse') ? event.offsetY : event.touches[0].clientY - canvas.getBoundingClientRect().top;
+        
+        ctx.lineTo(x, y);
+        ctx.stroke();
+    }
+
+    function clearCanvas() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    // Initialize Face-API.js
+    async function initFaceAPI() {
+        try {
+            await faceapi.nets.tinyFaceDetector.loadFromUri('https://cdnjs.cloudflare.com/ajax/libs/face-api.js/models/tiny_face_detector_model-weights_manifest.json');
+            await faceapi.nets.faceExpressionNet.loadFromUri('https://cdnjs.cloudflare.com/ajax/libs/face-api.js/models/face_expression_model-weights_manifest.json');
+            
+            console.log("Face API models loaded");
+            isFaceAPILoaded = true;
+            
+            // Set up canvas
+            faceDetectionCanvas.width = videoElement.videoWidth;
+            faceDetectionCanvas.height = videoElement.videoHeight;
+            
+        } catch (error) {
+            console.error("Error loading Face API models:", error);
+            alert("Failed to load facial recognition models. Sentiment analysis may not work.");
+        }
+    }
+    
+    // Start face detection
+    function startFaceDetection() {
+        if (!isFaceAPILoaded) {
+            console.warn("Face API not loaded yet");
+            return;
+        }
+        
+        faceDetectionInterval = setInterval(async () => {
+            if (videoElement.readyState === 4) {
+                const canvasCtx = faceDetectionCanvas.getContext('2d');
+                faceDetectionCanvas.width = videoElement.videoWidth;
+                faceDetectionCanvas.height = videoElement.videoHeight;
+                
+                // Detect faces with expressions
+                const detections = await faceapi.detectAllFaces(
+                    videoElement, 
+                    new faceapi.TinyFaceDetectorOptions()
+                ).withFaceExpressions();
+                
+                if (detections.length > 0) {
+                    // Clear canvas
+                    canvasCtx.clearRect(0, 0, faceDetectionCanvas.width, faceDetectionCanvas.height);
+                    
+                    // Draw detections
+                    detections.forEach(detection => {
+                        // Draw face box
+                        const box = detection.detection.box;
+                        canvasCtx.strokeStyle = "#3498db";
+                        canvasCtx.lineWidth = 2;
+                        canvasCtx.strokeRect(box.x, box.y, box.width, box.height);
+                        
+                        // Record emotions if recording
+                        if (mediaRecorder && mediaRecorder.state === "recording") {
+                            const expressions = detection.expressions;
+                            
+                            // Simplify expressions into 4 categories
+                            const happy = expressions.happy;
+                            const sad = expressions.sad;
+                            const angry = expressions.angry;
+                            const neutral = expressions.neutral;
+                            
+                            emotionData.happy.push(happy);
+                            emotionData.sad.push(sad);
+                            emotionData.angry.push(angry);
+                            emotionData.neutral.push(neutral);
+                            
+                            // Update sentiment UI
+                            updateSentimentUI();
+                        }
+                    });
+                }
+            }
+        }, 100);
+    }
+    
+    // Stop face detection
+    function stopFaceDetection() {
+        if (faceDetectionInterval) {
+            clearInterval(faceDetectionInterval);
+        }
+    }
+    
+    // Update sentiment UI based on collected emotion data
+    function updateSentimentUI() {
+        if (emotionData.happy.length === 0) return;
+        
+        // Calculate average for each emotion
+        const avgHappy = emotionData.happy.reduce((sum, val) => sum + val, 0) / emotionData.happy.length;
+        const avgSad = emotionData.sad.reduce((sum, val) => sum + val, 0) / emotionData.sad.length;
+        const avgAngry = emotionData.angry.reduce((sum, val) => sum + val, 0) / emotionData.angry.length;
+        const avgNeutral = emotionData.neutral.reduce((sum, val) => sum + val, 0) / emotionData.neutral.length;
+        
+        // Convert to percentages
+        const happyPercent = Math.round(avgHappy * 100);
+        const sadPercent = Math.round(avgSad * 100);
+        const angryPercent = Math.round(avgAngry * 100);
+        const neutralPercent = Math.round(avgNeutral * 100);
+        
+        // Update UI elements
+        document.getElementById("happyValue").textContent = `${happyPercent}%`;
+        document.getElementById("happyFill").style.width = `${happyPercent}%`;
+        
+        document.getElementById("sadValue").textContent = `${sadPercent}%`;
+        document.getElementById("sadFill").style.width = `${sadPercent}%`;
+        
+        document.getElementById("angryValue").textContent = `${angryPercent}%`;
+        document.getElementById("angryFill").style.width = `${angryPercent}%`;
+        
+        document.getElementById("neutralValue").textContent = `${neutralPercent}%`;
+        document.getElementById("neutralFill").style.width = `${neutralPercent}%`;
+        
+        // Determine overall sentiment
+        const summaryElement = document.getElementById("sentimentSummary");
+        let dominantEmotion = "neutral";
+        let highestValue = neutralPercent;
+        
+        if (happyPercent > highestValue) {
+            dominantEmotion = "happy";
+            highestValue = happyPercent;
+        }
+        if (sadPercent > highestValue) {
+            dominantEmotion = "sad";
+            highestValue = sadPercent;
+        }
+        if (angryPercent > highestValue) {
+            dominantEmotion = "angry";
+            highestValue = angryPercent;
+        }
+        
+        // Set summary text and style
+        summaryElement.className = "sentiment-summary";
+        
+        if (dominantEmotion === "happy") {
+            summaryElement.textContent = "Overall: Positive";
+            summaryElement.classList.add("positive-summary");
+        } else if (dominantEmotion === "neutral") {
+            summaryElement.textContent = "Overall: Neutral";
+            summaryElement.classList.add("neutral-summary");
+        } else {
+            summaryElement.textContent = "Overall: Negative";
+            summaryElement.classList.add("negative-summary");
+        }
+    }
+    
+    // Get final video sentiment
+    function getFinalSentiment() {
+        if (emotionData.happy.length === 0) {
+            return "Neutral"; // Default if no data
+        }
+        
+        const avgHappy = emotionData.happy.reduce((sum, val) => sum + val, 0) / emotionData.happy.length;
+        const avgSad = emotionData.sad.reduce((sum, val) => sum + val, 0) / emotionData.sad.length;
+        const avgAngry = emotionData.angry.reduce((sum, val) => sum + val, 0) / emotionData.angry.length;
+        const avgNeutral = emotionData.neutral.reduce((sum, val) => sum + val, 0) / emotionData.neutral.length;
+        
+        // Simple logic for overall sentiment
+        if (avgHappy > Math.max(avgSad, avgAngry, avgNeutral)) {
+            return "Positive";
+        } else if (avgSad > avgHappy || avgAngry > avgHappy) {
+            return "Negative";
+        } else {
+            return "Neutral";
+        }
+    }
+
+    // Start camera automatically when "Get Started" is clicked
+    getStartedBtn.addEventListener("click", () => {
+        setTimeout(() => {
+            initCamera();
+            initGeolocation();
+            initFaceAPI();
+        }, 500); // Slight delay to allow scrolling to form
+    });
+    
+    // Update date and time 
+    function updateDateTime() {
+        const now = new Date();
+        datetimeElement.textContent = now.toLocaleString();
+    }
+    
+    // Initialize geolocation
+    function initGeolocation() {
+        updateDateTime(); // Initial date/time update
+        
+        // Set up continuous date/time updates
+        setInterval(updateDateTime, 1000);
+        
+        if ("geolocation" in navigator) {
+            // Request location with high accuracy
+            const options = {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 0
+            };
+            
+            // Get initial location
+            navigator.geolocation.getCurrentPosition(
+                updateLocationSuccess,
+                updateLocationError,
+                options
+            );
+            
+            // Set up continuous location updates
+            locationUpdateInterval = setInterval(() => {
+                navigator.geolocation.getCurrentPosition(
+                    updateLocationSuccess,
+                    updateLocationError,
+                    options
+                );
+            }, 5000); // Update every 5 seconds
+            
+            // Show success message
+            locationStatusElement.innerHTML = '<div class="location-status status-success">GPS tracking enabled</div>';
+        } else {
+            // Geolocation not supported
+            gpsCoordinatesElement.textContent = "Geolocation not supported by your browser";
+            gpsAddressElement.textContent = "Unable to determine location";
+            locationStatusElement.innerHTML = '<div class="location-status status-error">GPS tracking not available</div>';
+        }
+    }
+    
+    // Success handler for geolocation
+    function updateLocationSuccess(position) {
+        currentPosition = position;
+        const { latitude, longitude, accuracy } = position.coords;
+        
+        // Update GPS coordinates
+        gpsCoordinatesElement.textContent = `${latitude.toFixed(6)}, ${longitude.toFixed(6)} (±${Math.round(accuracy)}m)`;
+        
+        // Attempt to get address using reverse geocoding
+        // Here we're using a placeholder since actual geocoding might need an API
+        getAddressFromCoordinates(latitude, longitude);
+        
+        // Auto-fill land location if empty
+        const landLocationInput = document.getElementById("landLocation");
+        if (landLocationInput.value === "") {
+            landLocationInput.value = `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
+        }
+    }
+    
+    // Error handler for geolocation
+    function updateLocationError(error) {
+        let errorMessage;
+        
+        switch(error.code) {
+            case error.PERMISSION_DENIED:
+                errorMessage = "User denied the request for geolocation";
+                break;
+            case error.POSITION_UNAVAILABLE:
+                errorMessage = "Location information is unavailable";
+                break;
+            case error.TIMEOUT:
+                errorMessage = "The request to get user location timed out";
+                break;
+            case error.UNKNOWN_ERROR:
+                errorMessage = "An unknown error occurred";
+                break;
+        }
+        
+        gpsCoordinatesElement.textContent = "Error: " + errorMessage;
+        locationStatusElement.innerHTML = `<div class="location-status status-error">GPS error: ${errorMessage}</div>`;
+    }
+    
+    // Get address from coordinates (simulated)
+    function getAddressFromCoordinates(latitude, longitude) {
+        // In a real implementation, you would use a geocoding service like Google Maps API
+        // For this demo, we'll use a placeholder message
+        gpsAddressElement.textContent = "Address lookup available with geocoding API integration";
+    }
+
+    // Initialize camera
+    async function initCamera() {
+        try {
+            stream = await navigator.mediaDevices.getUserMedia({ 
+                video: true, 
+                audio: true 
+            });
+            videoElement.srcObject = stream;
+            
+            // Initialize face detection when video is ready
+            videoElement.onloadedmetadata = () => {
+                if (isFaceAPILoaded) {
+                    startFaceDetection();
+                } else {
+                    // Try again when face API is loaded
+                    const checkInterval = setInterval(() => {
+                        if (isFaceAPILoaded) {
+                            startFaceDetection();
+                            clearInterval(checkInterval);
+                        }
+                    }, 1000);
+                }
+            };
+        } catch (err) {
+            console.error("Error accessing camera:", err);
+            alert("Unable to access camera. Please make sure you've granted camera permissions.");
+        }
+    }
+
+    // Start recording
+    startRecordBtn.addEventListener("click", () => {
+        if (!stream) {
+            alert("Camera not initialized. Please try again.");
+            return;
+        }
+        
+        if (!currentPosition) {
+            if (confirm("GPS location hasn't been determined yet. Do you want to proceed without location data?")) {
+                startRecording();
+            }
+        } else {
+            startRecording();
+        }
+    });
+    
+    function startRecording() {
+        // Reset emotion data
+        emotionData = {
+            happy: [],
+            neutral: [],
+            sad: [],
+            angry: []
+        };
+        
+        recordedChunks = [];
+        mediaRecorder = new MediaRecorder(stream);
+
+        mediaRecorder.ondataavailable = (event) => {
+            if (event.data.size > 0) {
+                recordedChunks.push(event.data);
+            }
+        };
+
+        mediaRecorder.onstop = () => {
+            const videoBlob = new Blob(recordedChunks, { type: 'video/webm' });
+            console.log("Video recorded:", videoBlob);
+            
+            // Create metadata object with location and sentiment data
+            const metadata = {
+                recordingDate: new Date().toISOString(),
+                location: currentPosition ? {
+                    latitude: currentPosition.coords.latitude,
+                    longitude: currentPosition.coords.longitude,
+                    accuracy: currentPosition.coords.accuracy
+                } : null,
+                duration: recordingTime,
+                videoSentiment: getFinalSentiment(),
+                emotionData: {
+                    happy: emotionData.happy.reduce((sum, val) => sum + val, 0) / emotionData.happy.length,
+                    sad: emotionData.sad.reduce((sum, val) => sum + val, 0) / emotionData.sad.length,
+                    angry: emotionData.angry.reduce((sum, val) => sum + val, 0) / emotionData.angry.length,
+                    neutral: emotionData.neutral.reduce((sum, val) => sum + val, 0) / emotionData.neutral.length
+                }
+            };
+            
+            console.log("Video metadata with sentiment:", metadata);
+            // You could upload both the blob and metadata to your server
+        };
+
+        // Start recording
+        mediaRecorder.start();
+        startRecordBtn.disabled = true;
+        stopRecordBtn.disabled = false;
+        recordingIndicator.style.display = "inline";
+        
+        // Start timer
+        recordingTime = 0;
+        updateTimer();
+        timerInterval = setInterval(updateTimer, 1000);
+    }
+
+    // Stop recording
+    stopRecordBtn.addEventListener("click", () => {
+        if (mediaRecorder && mediaRecorder.state !== "inactive") {
+            mediaRecorder.stop();
+            startRecordBtn.disabled = false;
+            stopRecordBtn.disabled = true;
+            recordingIndicator.style.display = "none";
+            clearInterval(timerInterval);
+        }
+    });
+
+    // Update recording timer
+    function updateTimer() {
+        recordingTime++;
+        const minutes = Math.floor(recordingTime / 60).toString().padStart(2, '0');
+        const seconds = (recordingTime % 60).toString().padStart(2, '0');
+        recordingTimer.textContent = `${minutes}:${seconds}`;
+    }
+
+    // Form submission
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        // Ensure video was recorded
+        if (recordedChunks.length === 0) {
+            alert("Please record a video before submitting");
+            return;
+        }
+
+        // Get text sentiment from feedback
+        const feedbackText = document.getElementById("feedback").value.toLowerCase();
+        let textSentiment = "Neutral";
+        if (feedbackText.includes("good") || feedbackText.includes("excellent")) {
+            textSentiment = "Positive";
+        } else if (feedbackText.includes("bad") || feedbackText.includes("poor")) {
+            textSentiment = "Negative";
+        }
+
+        // Get video sentiment
+        const videoSentiment = getFinalSentiment();
+        
+        // Create form data object
+        const formData = new FormData();
+        formData.append("userRole", document.getElementById("userRole").value);
+        formData.append("ownerName", document.getElementById("ownerName").value);
+        formData.append("landLocation", document.getElementById("landLocation").value);
+        formData.append("landSize", document.getElementById("landSize").value);
+        formData.append("feedback", feedbackText);
+        formData.append("textSentiment", textSentiment);
+        formData.append("videoSentiment", videoSentiment);
+        formData.append("signature", canvas.toDataURL("image/png"));
+        formData.append("video", new Blob(recordedChunks, { type: 'video/webm' }));
+
+        // Log form data for demonstration
+        console.log("Form Data Submitted:", formData);
+
+        // Simulate form submission
+        message.classList.remove("hidden");
+        form.reset();
+        clearCanvas();
+        stopFaceDetection();
+        stopRecording();
+    });
+
+    // Stop recording function
+    function stopRecording() {
+        if (mediaRecorder && mediaRecorder.state !== "inactive") {
+            mediaRecorder.stop();
+            startRecordBtn.disabled = false;
+            stopRecordBtn.disabled = true;
+            recordingIndicator.style.display = "none";
+            clearInterval(timerInterval);
+        }
+    }
+</script>
+</body>
+</html>

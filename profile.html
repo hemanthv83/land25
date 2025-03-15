@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | Digital Land Registration Portal</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #f39c12;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #27ae60;
+            --danger: #e74c3c;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1rem;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 60px;
+            width: 80px;
+            margin-right: 30px;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 1.5rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+        
+        .user-menu {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .user-menu-btn {
+            background: transparent;
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            font-size: 1rem;
+        }
+        
+        .user-menu-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: white;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .user-menu-content a {
+            color: var(--dark);
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .user-menu-content a:hover {
+            background-color: #f1f1f1;
+        }
+        
+        .user-menu:hover .user-menu-content {
+            display: block;
+        }
+        
+        .profile-section {
+            padding: 2rem 0;
+        }
+        
+        .page-header {
+            margin-bottom: 2rem;
+        }
+        
+        .page-header h1 {
+            color: var(--primary);
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-header p {
+            color: #666;
+        }
+        
+        .profile-container {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+        }
+        
+        .profile-sidebar {
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+        }
+        
+        .user-profile {
+            text-align: center;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 1.5rem;
+        }
+        
+        .user-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            overflow: hidden;
+            background-color: var(--secondary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 4rem;
+            position: relative;
+        }
+        
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .change-avatar {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background-color: var(--accent);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .change-avatar input {
+            display: none;
+        }
+        
+        .user-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .user-email {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+        
+        .sidebar-nav {
+            list-style: none;
+        }
+        
+        .sidebar-nav li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .sidebar-nav a {
+            display: block;
+            padding: 0.8rem;
+            text-decoration: none;
+            color: var(--dark);
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        
+        .sidebar-nav a:hover,
+        .sidebar-nav a.active {
+            background-color: var(--light);
+            color: var(--secondary);
+        }
+        
+        .sidebar-nav a i {
+            margin-right: 0.5rem;
+        }
+        
+        .profile-content {
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .profile-tabs {
+            display: flex;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .profile-tab {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            font-weight: bold;
+            color: #666;
+            transition: all 0.3s;
+        }
+        
+        .profile-tab.active {
+            color: var(--secondary);
+            border-bottom: 2px solid var(--secondary);
+        }
+        
+        .profile-tab:hover {
+            color: var(--secondary);
+        }
+        
+        .tab-content {
+            padding: 2rem;
+        }
+        
+        .tab-pane {
+            display: none;
+        }
+        
+        .tab-pane.active {
+            display: block;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group.col-span-2 {
+            grid-column: span 2;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+        
+        .form-footer {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-primary {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid #ddd;
+            color: #666;
+        }
+        
+        .btn-outline:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .save-message {
+            display: none;
+            padding: 1rem;
+            background-color: var(--success);
+            color: white;
+            border-radius: 5px;
+            margin-bottom: 1.5rem;
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 0;
+            margin-top: 4rem;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid #3a506b;
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 992px) {
+            .profile-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-group.col-span-2 {
+                grid-column: span 1;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Authentication Check Script -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Check if user is logged in
+            const isLoggedIn = localStorage.getItem("isLoggedIn");
+            if (isLoggedIn !== "true") {
+                // Redirect to login page if not logged in
+                window.location.href = "login.html";
+            } else {
+                // Display user information
+                const userName = localStorage.getItem("userName") || "User";
+                const userEmail = localStorage.getItem("userEmail") || "user@example.com";
+                
+                // Update all user name elements
+                const userNameElements = document.querySelectorAll(".user-name-display");
+                userNameElements.forEach(element => {
+                    element.textContent = userName;
+                });
+                
+                // Update user email
+                const userEmailElement = document.getElementById("userEmail");
+                if (userEmailElement) {
+                    userEmailElement.textContent = userEmail;
+                }
+                // Pre-fill form fields with user data
+                document.getElementById("inputFirstName").value = localStorage.getItem("userFirstName") || "";
+                document.getElementById("inputLastName").value = localStorage.getItem("userLastName") || "";
+                document.getElementById("inputEmail").value = userEmail;
+                document.getElementById("inputPhone").value = localStorage.getItem("userPhone") || "";
+                document.getElementById("inputAddress").value = localStorage.getItem("userAddress") || "";
+                document.getElementById("inputCity").value = localStorage.getItem("userCity") || "";
+                document.getElementById("inputState").value = localStorage.getItem("userState") || "";
+                document.getElementById("inputZip").value = localStorage.getItem("userZip") || "";
+            }
+        });
+        
+        // Function to handle form submission
+        function savePersonalInfo() {
+            // Get form values
+            const firstName = document.getElementById("inputFirstName").value;
+            const lastName = document.getElementById("inputLastName").value;
+            const email = document.getElementById("inputEmail").value;
+            const phone = document.getElementById("inputPhone").value;
+            const address = document.getElementById("inputAddress").value;
+            const city = document.getElementById("inputCity").value;
+            const state = document.getElementById("inputState").value;
+            const zip = document.getElementById("inputZip").value;
+            
+            // Save to localStorage
+            localStorage.setItem("userFirstName", firstName);
+            localStorage.setItem("userLastName", lastName);
+            localStorage.setItem("userEmail", email);
+            localStorage.setItem("userPhone", phone);
+            localStorage.setItem("userAddress", address);
+            localStorage.setItem("userCity", city);
+            localStorage.setItem("userState", state);
+            localStorage.setItem("userZip", zip);
+            localStorage.setItem("userName", firstName + " " + lastName);
+            
+            // Show save message
+            const saveMessage = document.getElementById("saveMessage");
+            saveMessage.style.display = "block";
+            
+            // Update displayed user name
+            const userNameElements = document.querySelectorAll(".user-name-display");
+            userNameElements.forEach(element => {
+                element.textContent = firstName + " " + lastName;
+            });
+            
+            // Hide message after 3 seconds
+            setTimeout(function() {
+                saveMessage.style.display = "none";
+            }, 3000);
+            
+            return false; // Prevent form submission
+        }
+        
+        // Tab switching functionality
+        function switchTab(tabId) {
+            // Hide all tab panes
+            const tabPanes = document.querySelectorAll('.tab-pane');
+            tabPanes.forEach(pane => {
+                pane.classList.remove('active');
+            });
+            
+            // Deactivate all tabs
+            const tabs = document.querySelectorAll('.profile-tab');
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Activate selected tab and pane
+            document.getElementById(tabId).classList.add('active');
+            document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
+        }
+        
+        // Logout functionality
+        function logout() {
+            localStorage.removeItem("isLoggedIn");
+            window.location.href = "login.html";
+        }
+    </script>
+
+    <header>
+        <nav class="container">
+            <div class="logo">
+                <img src="assets/logo.png" alt="Digital Land Registry Logo">
+                <span>Digital Land Registry</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="property-search.html">Property Search</a></li>
+                <li><a href="help.html">Help</a></li>
+            </ul>
+            <div class="user-menu">
+                <button class="user-menu-btn">
+                    <span class="user-name-display">John Doe</span> ▼
+                </button>
+                <div class="user-menu-content">
+                    <a href="profile.html">My Profile</a>
+                    <a href="my-properties.html">My Properties</a>
+                    <a href="applications.html">My Applications</a>
+                    <a href="notifications.html">Notifications</a>
+                    <a href="#" onclick="logout()">Logout</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="profile-section">
+            <div class="page-header">
+                <h1>My Profile</h1>
+                <p>Manage your personal information and account settings</p>
+            </div>
+            
+            <div class="profile-container">
+                <aside class="profile-sidebar">
+                    <div class="user-profile">
+                        <div class="user-avatar">
+                            <div class="initials">JD</div>
+                            <label class="change-avatar">
+                                <input type="file" accept="image/*">
+                                <i class="fas fa-camera"></i>
+                            </label>
+                        </div>
+                        <h2 class="user-name user-name-display">John Doe</h2>
+                        <p class="user-email" id="userEmail">johndoe@example.com</p>
+                        <a href="#" class="btn btn-outline">Edit Profile Picture</a>
+                    </div>
+                    
+                    <nav>
+                        <ul class="sidebar-nav">
+                            <li><a href="#" class="active"><i class="fas fa-user"></i> Personal Information</a></li>
+                            <li><a href="#"><i class="fas fa-shield-alt"></i> Security Settings</a></li>
+                            <li><a href="#"><i class="fas fa-bell"></i> Notification Preferences</a></li>
+                            <li><a href="#"><i class="fas fa-history"></i> Activity Log</a></li>
+                            <li><a href="#"><i class="fas fa-question-circle"></i> Help & Support</a></li>
+                        </ul>
+                    </nav>
+                </aside>
+                
+                <div class="profile-content">
+                    <div class="profile-tabs">
+                        <div class="profile-tab active" data-tab="personalInfo" onclick="switchTab('personalInfo')">Personal Information</div>
+                        <div class="profile-tab" data-tab="securitySettings" onclick="switchTab('securitySettings')">Security</div>
+                        <div class="profile-tab" data-tab="notifications" onclick="switchTab('notifications')">Notifications</div>
+                    </div>
+                    
+                    <div class="tab-content">
+                        <div id="saveMessage" class="save-message">
+                            Your changes have been saved successfully!
+                        </div>
+                        
+                        <!-- Personal Information Tab -->
+                        <div id="personalInfo" class="tab-pane active">
+                            <form onsubmit="return savePersonalInfo()">
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="inputFirstName">First Name</label>
+                                        <input type="text" id="inputFirstName" placeholder="Enter first name">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="inputLastName">Last Name</label>
+                                        <input type="text" id="inputLastName" placeholder="Enter last name">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="inputEmail">Email Address</label>
+                                        <input type="email" id="inputEmail" placeholder="Enter email">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="inputPhone">Phone Number</label>
+                                        <input type="tel" id="inputPhone" placeholder="Enter phone number">
+                                    </div>
+                                    
+                                    <div class="form-group col-span-2">
+                                        <label for="inputAddress">Address</label>
+                                        <input type="text" id="inputAddress" placeholder="Enter your address">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="inputCity">City</label>
+                                        <input type="text" id="inputCity" placeholder="Enter city">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="inputState">State/Province</label>
+                                        <select id="inputState">
+                                            <option value="" selected>Choose...</option>
+                                            <option value="AL">Alabama</option>
+                                            <option value="AK">Alaska</option>
+                                            <!-- More states would be listed here -->
+                                            <option value="WY">Wyoming</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="inputZip">Zip/Postal Code</label>
+                                        <input type="text" id="inputZip" placeholder="Enter zip code">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-footer">
+                                    <button type="button" class="btn btn-outline">Cancel</button>
+                                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <!-- Security Settings Tab -->
+                        <div id="securitySettings" class="tab-pane">
+                            <form>
+                                <div class="form-grid">
+                                    <div class="form-group col-span-2">
+                                        <label for="currentPassword">Current Password</label>
+                                        <input type="password" id="currentPassword" placeholder="Enter current password">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="newPassword">New Password</label>
+                                        <input type="password" id="newPassword" placeholder="Enter new password">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="confirmPassword">Confirm New Password</label>
+                                        <input type="password" id="confirmPassword" placeholder="Confirm new password">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-footer">
+                                    <button type="button" class="btn btn-outline">Cancel</button>
+                                    <button type="submit" class="btn btn-primary">Update Password</button>
+                                </div>
+                            </form>
+                            
+                            <hr style="margin: 2rem 0; border: none; border-top: 1px solid #eee;">
+                            
+                            <h3>Two-Factor Authentication</h3>
+                            <p style="margin-bottom: 1rem;">Add an extra layer of security to your account.</p>
+                            
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem;">
+                                <div>
+                                    <h4 style="margin-bottom: 0.3rem;">SMS Authentication</h4>
+                                    <p style="color: #666; font-size: 0.9rem;">Receive a verification code via SMS</p>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                            
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                <div>
+                                    <h4 style="margin-bottom: 0.3rem;">Authenticator App</h4>
+                                    <p style="color: #666; font-size: 0.9rem;">Use an authenticator app like Google Authenticator</p>
+                                </div>
+                                <button class="btn btn-outline">Setup</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Notifications Tab -->
+                        <div id="notifications" class="tab-pane">
+                            <h3>Email Notifications</h3>
+                            <p style="margin-bottom: 1.5rem;">Choose which notifications you'd like to receive via email.</p>
+                            
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: flex; align-items: center;">
+                                    <input type="checkbox" checked style="width: auto; margin-right: 0.5rem;">
+                                    <span>Application Status Updates</span>
+                                </label>
+                            </div>
+                            
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: flex; align-items: center;">
+                                    <input type="checkbox" checked style="width: auto; margin-right: 0.5rem;">
+                                    <span>Property Registration Notifications</span>
+                                </label>
+                            </div>
+                            
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: flex; align-items: center;">
+                                    <input type="checkbox" checked style="width: auto; margin-right: 0.5rem;">
+                                    <span>Document Verification Results</span>
+                                </label>
+                            </div>
+                            
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: flex; align-items: center;">
+                                    <input type="checkbox" style="width: auto; margin-right: 0.5rem;">
+                                    <span>News and Updates</span>
+                                </label>
+                            </div>
+                            
+                            <div style="margin-bottom: 2rem;">
+                                <label style="display: flex; align-items: center;">
+                                    <input type="checkbox" style="width: auto; margin-right: 0.5rem;">
+                                    <span>Marketing and Promotions</span>
+                                </label>
+                            </div>
+                            
+                            <h3>SMS Notifications</h3>
+                            <p style="margin-bottom: 1.5rem;">Choose which notifications you'd like to receive via SMS.</p>
+                            
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: flex; align-items: center;">
+                                    <input type="checkbox" checked style="width: auto; margin-right: 0.5rem;">
+                                    <span>Critical Application Updates</span>
+                                </label>
+                            </div>
+                            
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: flex; align-items: center;">
+                                    <input type="checkbox" checked style="width: auto; margin-right: 0.5rem;">
+                                    <span>Security Alerts</span>
+                                </label>
+                            </div>
+                            
+                            <div class="form-footer">
+                                <button type="submit" class="btn btn-primary">Save Preferences</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h3>About Us</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Our Mission</a></li>
+                        <li><a href="#">History</a></li>
+                        <li><a href="#">Leadership</a></li>
+                        <li><a href="#">Careers</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Services</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Property Registration</a></li>
+                        <li><a href="#">Title Search</a></li>
+                        <li><a href="#">Deed Transfer</a></li>
+                        <li><a href="#">Property Verification</a></li>
+                        <li><a href="#">Document Certification</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">FAQs</a></li>
+                        <li><a href="#">Knowledge Base</a></li>
+                        <li><a href="#">Forms & Documents</a></li>
+                        <li><a href="#">Tutorials</a></li>
+                        <li><a href="#">Legal Information</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Us</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Support</a></li>
+                        <li><a href="#">Email Us</a></li>
+                        <li><a href="#">Feedback</a></li>
+                        <li><a href="#">Report an Issue</a></li>
+                        <li><a href="#">Find an Office</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Digital Land Registration Portal. All rights reserved.</p>
+                <p>
+                    <a href="#">Privacy Policy</a> | 
+                    <a href="#">Terms of Service</a> | 
+                    <a href="#">Accessibility</a> | 
+                    <a href="#">Security</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Font Awesome for icons -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+</body>
+</html>

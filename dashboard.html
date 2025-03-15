@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Digital Land Registration Portal</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #f39c12;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #27ae60;
+            --danger: #e74c3c;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1rem;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 60px;
+            width: 80px;
+            margin-right: 30px;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 1.5rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+        
+        .user-menu {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .user-menu-btn {
+            background: transparent;
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            font-size: 1rem;
+        }
+        
+        .user-menu-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: white;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .user-menu-content a {
+            color: var(--dark);
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .user-menu-content a:hover {
+            background-color: #f1f1f1;
+        }
+        
+        .user-menu:hover .user-menu-content {
+            display: block;
+        }
+        
+        .dashboard {
+            padding: 2rem 0;
+        }
+        
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .dashboard-title h1 {
+            color: var(--primary);
+            font-size: 2rem;
+        }
+        
+        .dashboard-actions .btn {
+            margin-left: 1rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background-color: var(--accent);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background-color: #e67e22;
+        }
+        
+        .btn-primary {
+            background-color: var(--secondary);
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+        }
+        
+        .btn-success:hover {
+            background-color: #219653;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+        }
+        
+        .dashboard-sidebar {
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+        }
+        
+        .user-profile {
+            text-align: center;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 1.5rem;
+        }
+        
+        .user-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            overflow: hidden;
+            background-color: var(--secondary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 3rem;
+        }
+        
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .user-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .user-email {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+        
+        .sidebar-nav {
+            list-style: none;
+        }
+        
+        .sidebar-nav li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .sidebar-nav a {
+            display: block;
+            padding: 0.8rem;
+            text-decoration: none;
+            color: var(--dark);
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        
+        .sidebar-nav a:hover,
+        .sidebar-nav a.active {
+            background-color: var(--light);
+            color: var(--secondary);
+        }
+        
+        .sidebar-nav a i {
+            margin-right: 0.5rem;
+        }
+        
+        .dashboard-content {
+            display: grid;
+            grid-template-rows: auto 1fr;
+            gap: 2rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .stat-card {
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .stat-card h3 {
+            color: #666;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-card .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-card .stat-change {
+            font-size: 0.9rem;
+            color: var(--success);
+        }
+        
+        .applications-list {
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .applications-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .applications-header h2 {
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+        
+        .applications-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .applications-table th,
+        .applications-table td {
+            padding: 1rem 1.5rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .applications-table th {
+            background-color: #f9f9f9;
+            font-weight: bold;
+            color: #666;
+        }
+        
+        .applications-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .applications-table .status {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-align: center;
+            display: inline-block;
+        }
+        
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-in-progress {
+            background-color: #cce5ff;
+            color: #004085;
+        }
+        
+        .status-approved {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .status-rejected {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .show-all {
+            display: block;
+            text-align: center;
+            padding: 1rem;
+            text-decoration: none;
+            color: var(--secondary);
+            font-weight: bold;
+            border-top: 1px solid #eee;
+        }
+        
+        .show-all:hover {
+            background-color: #f9f9f9;
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 0;
+            margin-top: 4rem;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid #3a506b;
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 992px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .applications-table {
+                font-size: 0.9rem;
+            }
+            
+            .applications-table th,
+            .applications-table td {
+                padding: 0.8rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Authentication Check Script -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Check if user is logged in
+            const isLoggedIn = localStorage.getItem("isLoggedIn");
+            if (isLoggedIn !== "true") {
+                // Redirect to login page if not logged in
+                window.location.href = "login.html";
+            } else {
+                // Display user information
+                const userName = localStorage.getItem("userName") || "User";
+                const userEmail = localStorage.getItem("userEmail") || "user@example.com";
+                
+                // Update all user name elements
+                const userNameElements = document.querySelectorAll(".user-name-display");
+                userNameElements.forEach(element => {
+                    element.textContent = userName;
+                });
+                
+                // Update user email
+                const userEmailElement = document.getElementById("userEmail");
+                if (userEmailElement) {
+                    userEmailElement.textContent = userEmail;
+                }
+                
+                // Update user avatar initial
+                const userInitialElement = document.getElementById("userInitial");
+                if (userInitialElement) {
+                    userInitialElement.textContent = userName.charAt(0).toUpperCase();
+                }
+            }
+        });
+        
+        // Logout function
+        function logout() {
+            localStorage.removeItem("isLoggedIn");
+            localStorage.removeItem("userName");
+            localStorage.removeItem("userEmail");
+            window.location.href = "login.html";
+        }
+    </script>
+
+    <!-- Navigation -->
+    <header>
+        <nav class="container">
+            <div class="logo">
+                <img src="Digital_Land_Registry-removebg-preview.png" alt="Logo"> Digital Land Registry
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="service.html">Services</a></li>
+                <li><a href="index.html#process">Process</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li class="user-menu">
+                    <button class="user-menu-btn">
+                        Welcome, <span class="user-name-display">User</span> ▼
+                    </button>
+                    <div class="user-menu-content">
+                        <a href="dashboard.html">My Dashboard</a>
+                        <a href="profile.html">My Profile</a>
+                        <a href="my-applications.html">My Applications</a>
+                        <a href="#" onclick="logout()">Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Dashboard -->
+    <section class="dashboard container">
+        <div class="dashboard-header">
+            <div class="dashboard-title">
+                <h1>Dashboard</h1>
+                <p>Welcome back, <span class="user-name-display">User</span>! Manage your land registration applications.</p>
+            </div>
+            <div class="dashboard-actions">
+                <a href="registration-form.html" class="btn btn-primary">New Registration</a>
+                <a href="property-search.html" class="btn">Search Records</a>
+            </div>
+        </div>
+        
+        <div class="dashboard-grid">
+            <div class="dashboard-sidebar">
+                <div class="user-profile">
+                    <div class="user-avatar">
+                        <span id="userInitial">U</span>
+                    </div>
+                    <div class="user-name user-name-display">User Name</div>
+                    <div class="user-email" id="userEmail">user@example.com</div>
+                    <a href="profile.html" class="btn btn-primary" style="width: 100%;">Edit Profile</a>
+                </div>
+                <ul class="sidebar-nav">
+                    <li><a href="dashboard.html" class="active">Dashboard</a></li>
+                    <li><a href="my-applications.html">My Applications</a></li>
+                    <li><a href="my-properties.html">My Properties</a></li>
+                    <li><a href="documents.html">Documents</a></li>
+                    <li><a href="payments.html">Payments</a></li>
+                    <li><a href="settings.html">Settings</a></li>
+                    <li><a href="#" onclick="logout()">Logout</a></li>
+                </ul>
+            </div>
+            
+            <div class="dashboard-content">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Applications</h3>
+                        <div class="stat-value">5</div>
+                        <div class="stat-change">+2 this month</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Pending Approvals</h3>
+                        <div class="stat-value">2</div>
+                        <div class="stat-change">-1 since last week</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Completed</h3>
+                        <div class="stat-value">3</div>
+                        <div class="stat-change">+1 this month</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Next Appointment</h3>
+                        <div class="stat-value">Mar 20</div>
+                        <div class="stat-change">In 6 days</div>
+                    </div>
+                </div>
+                
+                <div class="applications-list">
+                    <div class="applications-header">
+                        <h2>Recent Applications</h2>
+                        <a href="my-applications.html" class="btn btn-primary">View All</a>
+                    </div>
+                    <table class="applications-table">
+                        <thead>
+                            <tr>
+                                <th>Application ID</th>
+                                <th>Property</th>
+                                <th>Submission Date</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>DLR-2025-0012</td>
+                                <td>123 Main Street, City</td>
+                                <td>Mar 10, 2025</td>
+                                <td><span class="status status-in-progress">In Progress</span></td>
+                                <td><a href="application-detail.html?id=DLR-2025-0012">View</a></td>
+                            </tr>
+                            <tr>
+                                <td>DLR-2025-0009</td>
+                                <td>456 Oak Avenue, City</td>
+                                <td>Mar 5, 2025</td>
+                                <td><span class="status status-pending">Pending</span></td>
+                                <td><a href="application-detail.html?id=DLR-2025-0009">View</a></td>
+                            </tr>
+                            <tr>
+                                <td>DLR-2025-0005</td>
+                                <td>789 Pine Road, City</td>
+                                <td>Feb 25, 2025</td>
+                                <td><span class="status status-approved">Approved</span></td>
+                                <td><a href="application-detail.html?id=DLR-2025-0005">View</a></td>
+                            </tr>
+                            <tr>
+                                <td>DLR-2025-0001</td>
+                                <td>321 Cedar Lane, City</td>
+                                <td>Feb 15, 2025</td>
+                                <td><span class="status status-approved">Approved</span></td>
+                                <td><a href="application-detail.html?id=DLR-2025-0001">View</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <a href="my-applications.html" class="show-all">Show All Applications</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h3>Digital Land Registry</h3>
+                    <p>Making land registration simple, secure, and accessible for everyone.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="service.html">Services</a></li>
+                        <li><a href="index.html#process">Process</a></li>
+                        <li><a href="index.html#contact">Contact</a></li>
+                        <li><a href="faq.html">FAQs</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Services</h3>
+                    <ul class="footer-links">
+                        <li><a href="land-registration.html">Land Registration</a></li>
+                        <li><a href="property-records.html">Property Records</a></li>
+                        <li><a href="document-verification.html">Document Verification</a></li>
+                        <li><a href="property-valuation.html">Property Valuation</a></li>
+                        <li><a href="fee-payment.html">Fee Payment</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Us</h3>
+                    <ul class="footer-links">
+                        <li>Email: info@digitallandregistry.gov</li>
+                        <li>Phone: +1-800-123-4567</li>
+                        <li>Address: 123 Government Plaza, City</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Digital Land Registry. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

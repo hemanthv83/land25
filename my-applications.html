@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Applications - Digital Land Registration Portal</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #f39c12;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #27ae60;
+            --danger: #e74c3c;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1rem;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 60px;
+            width: 80px;
+            margin-right: 30px;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 1.5rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+        
+        .user-menu {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .user-menu-btn {
+            background: transparent;
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            font-size: 1rem;
+        }
+        
+        .user-menu-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: white;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .user-menu-content a {
+            color: var(--dark);
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .user-menu-content a:hover {
+            background-color: #f1f1f1;
+        }
+        
+        .user-menu:hover .user-menu-content {
+            display: block;
+        }
+        
+        .page-header {
+            background-color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .page-header h1 {
+            color: var(--primary);
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-header p {
+            color: #666;
+        }
+        
+        .applications-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .applications-table th, 
+        .applications-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .applications-table th {
+            background-color: var(--secondary);
+            color: white;
+            font-weight: 600;
+        }
+        
+        .applications-table tr:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .status-pending {
+            background-color: #ffeaa7;
+            color: #d69e2e;
+        }
+        
+        .status-approved {
+            background-color: #c6f6d5;
+            color: #38a169;
+        }
+        
+        .status-rejected {
+            background-color: #fed7d7;
+            color: #e53e3e;
+        }
+        
+        .status-in-review {
+            background-color: #bee3f8;
+            color: #3182ce;
+        }
+        
+        .action-btn {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            color: white;
+            background-color: var(--secondary);
+            margin-right: 0.5rem;
+            transition: background-color 0.3s;
+        }
+        
+        .action-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .empty-state h3 {
+            font-size: 1.5rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+        
+        .empty-state p {
+            color: #666;
+            margin-bottom: 2rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background-color: var(--accent);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #e67e22;
+        }
+        
+        .filter-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .filter-group {
+            display: flex;
+            align-items: center;
+        }
+        
+        .filter-group label {
+            margin-right: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .filter-group select {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: white;
+        }
+        
+        .search-group {
+            display: flex;
+            align-items: center;
+        }
+        
+        .search-group input {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px 0 0 4px;
+            width: 200px;
+        }
+        
+        .search-group button {
+            padding: 0.5rem 1rem;
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            margin: 2rem 0;
+        }
+        
+        .pagination li {
+            margin: 0 0.25rem;
+        }
+        
+        .pagination a {
+            display: block;
+            padding: 0.5rem 0.8rem;
+            background-color: white;
+            color: var(--secondary);
+            text-decoration: none;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            transition: all 0.3s;
+        }
+        
+        .pagination a:hover,
+        .pagination a.active {
+            background-color: var(--secondary);
+            color: white;
+            border-color: var(--secondary);
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 0;
+            margin-top: 4rem;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid #3a506b;
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .filter-section {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .filter-group,
+            .search-group {
+                margin-bottom: 1rem;
+                width: 100%;
+            }
+            
+            .search-group input {
+                width: 100%;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Authentication Check Script -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Check if user is logged in
+            const isLoggedIn = localStorage.getItem("isLoggedIn");
+            if (isLoggedIn !== "true") {
+                // Redirect to login page if not logged in
+                window.location.href = "login.html";
+            } else {
+                // Display user name in the menu
+                const userName = localStorage.getItem("userName") || "User";
+                const userNameElement = document.getElementById("userName");
+                if (userNameElement) {
+                    userNameElement.textContent = userName;
+                }
+                
+                // Load applications from local storage (in a real app, this would be from a server)
+                loadApplications();
+            }
+        });
+        
+        // Logout function
+        function logout() {
+            localStorage.removeItem("isLoggedIn");
+            localStorage.removeItem("userName");
+            window.location.href = "login.html";
+        }
+        
+        // Load applications
+        function loadApplications() {
+            // In a real application, this would fetch data from a server
+            // For demo purposes, we'll use hardcoded data
+            const applications = [
+                {
+                    id: "APP1001",
+                    propertyType: "Residential Land",
+                    location: "123 Main St, City",
+                    area: "1200 sq ft",
+                    submissionDate: "2025-02-12",
+                    status: "In Review",
+                    lastUpdated: "2025-02-20"
+                },
+                {
+                    id: "APP1002",
+                    propertyType: "Agricultural Land",
+                    location: "Rural County, Plot 45",
+                    area: "2.5 acres",
+                    submissionDate: "2025-01-05",
+                    status: "Approved",
+                    lastUpdated: "2025-01-28"
+                },
+                {
+                    id: "APP1003",
+                    propertyType: "Commercial Space",
+                    location: "Downtown Business Park",
+                    area: "5000 sq ft",
+                    submissionDate: "2025-03-01",
+                    status: "Pending",
+                    lastUpdated: "2025-03-01"
+                }
+            ];
+            
+            const tbody = document.querySelector("tbody");
+            if (!tbody) return;
+            
+            tbody.innerHTML = "";
+            
+            applications.forEach(app => {
+                const row = document.createElement("tr");
+                let statusClass = "";
+                
+                switch(app.status.toLowerCase()) {
+                    case "pending":
+                        statusClass = "status-pending";
+                        break;
+                    case "in review":
+                        statusClass = "status-in-review";
+                        break;
+                    case "approved":
+                        statusClass = "status-approved";
+                        break;
+                    case "rejected":
+                        statusClass = "status-rejected";
+                        break;
+                    default:
+                        statusClass = "";
+                }
+                
+                row.innerHTML = `
+                    <td>${app.id}</td>
+                    <td>${app.propertyType}</td>
+                    <td>${app.location}</td>
+                    <td>${app.area}</td>
+                    <td>${app.submissionDate}</td>
+                    <td><span class="status ${statusClass}">${app.status}</span></td>
+                    <td>${app.lastUpdated}</td>
+                    <td>
+                        <a href="view-application.html?id=${app.id}" class="action-btn">View</a>
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+            });
+        }
+    </script>
+
+    <!-- Navigation -->
+    <header>
+        <nav class="container">
+            <div class="logo">
+                <img src="Digital_Land_Registry-removebg-preview.png" alt="Logo"> Digital Land Registry
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="service.html">Services</a></li>
+                <li><a href="index.html#process">Process</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li class="user-menu">
+                    <button class="user-menu-btn">Welcome, <span id="userName">User</span> ▼
+                    </button>
+                    <div class="user-menu-content">
+                        <a href="dashboard.html">My Dashboard</a>
+                        <a href="profile.html">My Profile</a>
+                        <a href="my-applications.html">My Applications</a>
+                        <a href="#" onclick="logout()">Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>My Applications</h1>
+            <p>Track and manage your land registration applications</p>
+        </div>
+    </section>
+
+    <!-- Applications Section -->
+    <section class="container">
+        <div class="filter-section">
+            <div class="filter-group">
+                <label for="status-filter">Status:</label>
+                <select id="status-filter">
+                    <option value="all">All</option>
+                    <option value="pending">Pending</option>
+                    <option value="in-review">In Review</option>
+                    <option value="approved">Approved</option>
+                    <option value="rejected">Rejected</option>
+                </select>
+            </div>
+            <div class="search-group">
+                <input type="text" placeholder="Search by ID or location">
+                <button>Search</button>
+            </div>
+        </div>
+
+        <table class="applications-table">
+            <thead>
+                <tr>
+                    <th>Application ID</th>
+                    <th>Property Type</th>
+                    <th>Location</th>
+                    <th>Area</th>
+                    <th>Submission Date</th>
+                    <th>Status</th>
+                    <th>Last Updated</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- JavaScript will populate this -->
+            </tbody>
+        </table>
+
+        <!-- Pagination -->
+        <ul class="pagination">
+            <li><a href="#">&laquo;</a></li>
+            <li><a href="#" class="active">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">&raquo;</a></li>
+        </ul>
+
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="registration-form.html" class="btn">Start New Application</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h3>Digital Land Registry</h3>
+                    <p>Making land registration simple, secure, and accessible for everyone.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="service.html">Services</a></li>
+                        <li><a href="index.html#process">Process</a></li>
+                        <li><a href="index.html#contact">Contact</a></li>
+                        <li><a href="faq.html">FAQs</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Services</h3>
+                    <ul class="footer-links">
+                        <li><a href="service.html">Land Registration</a></li>
+                        <li><a href="service.html">Property Records</a></li>
+                        <li><a href="service.html">Document Verification</a></li>
+                        <li><a href="service.html">Property Valuation</a></li>
+                        <li><a href="service.html">Fee Payment</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Us</h3>
+                    <ul class="footer-links">
+                        <li>Email: info@digitallandregistry.gov</li>
+                        <li>Phone: +1-800-123-4567</li>
+                        <li>Address: 123 Government Plaza, City</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Digital Land Registry. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
