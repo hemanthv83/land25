@@ -151,7 +151,7 @@
             margin-left: 10px;
         }
         
-        /* New styles for location info */
+        /* Location info */
         .location-info {
             background-color: rgba(0, 0, 0, 0.7);
             color: white;
@@ -257,6 +257,185 @@
             height: 300px;
             z-index: 10;
         }
+        
+        /* Aadhaar Recognition Styling */
+        .aadhaar-container {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        
+        .aadhaar-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #2c3e50;
+            text-align: center;
+        }
+        
+        .aadhaar-video-container {
+            position: relative;
+            margin-bottom: 15px;
+        }
+        
+        #aadhaarVideo {
+            width: 100%;
+            height: 200px;
+            background-color: #000;
+            border-radius: 5px;
+        }
+        
+        #aadhaarCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 200px;
+            z-index: 15;
+        }
+        
+        .capture-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        
+        .capture-btn {
+            flex-grow: 1;
+            margin-right: 5px;
+        }
+        
+        .reset-btn {
+            flex-grow: 1;
+            margin-left: 5px;
+            background-color: #95a5a6;
+        }
+        
+        .aadhaar-result {
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #f0f0f0;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        
+        .aadhaar-number {
+            font-size: 16px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-top: 5px;
+            letter-spacing: 1px;
+        }
+        
+        .aadhaar-status {
+            margin-top: 10px;
+            padding: 5px;
+            border-radius: 3px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .status-verified {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-failed {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .aadhaar-instructions {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 10px;
+            text-align: center;
+            font-style: italic;
+        }
+        
+        .scan-guide {
+            border: 2px dashed #3498db;
+            position: absolute;
+            top: 10%;
+            left: 10%;
+            width: 80%;
+            height: 80%;
+            z-index: 16;
+            pointer-events: none;
+        }
+        
+        .scan-guide-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 12px;
+            pointer-events: none;
+        }
+        
+        .processing-indicator {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            z-index: 20;
+        }
+        
+        .processing-indicator::after {
+            content: "...";
+            animation: dots 1.5s infinite;
+        }
+        
+        @keyframes dots {
+            0%, 20% { content: "."; }
+            40% { content: ".."; }
+            60%, 100% { content: "..."; }
+        }
+        
+        .verification-step {
+            display: flex;
+            align-items: center;
+            margin: 5px 0;
+        }
+        
+        .step-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: white;
+        }
+        
+        .step-pending {
+            background-color: #95a5a6;
+        }
+        
+        .step-complete {
+            background-color: #2ecc71;
+        }
+        
+        .step-error {
+            background-color: #e74c3c;
+        }
     </style>
 </head>
 <body>
@@ -285,6 +464,52 @@
 <section id="registrationForm" class="form-section">
     <h2>Land Registration Form</h2>
     <form id="landForm">
+        <!-- Aadhaar Card Verification Section -->
+        <div class="aadhaar-container">
+            <div class="aadhaar-title">Aadhaar Card Verification</div>
+            <div class="aadhaar-instructions">
+                Please position your Aadhaar card within the frame. Hold it steady for OCR scanning.
+            </div>
+            
+            <div class="aadhaar-video-container">
+                <video id="aadhaarVideo" autoplay muted></video>
+                <canvas id="aadhaarCanvas"></canvas>
+                <div class="scan-guide">
+                    <span class="scan-guide-text">Align Aadhaar card here</span>
+                </div>
+                <div id="processingIndicator" class="processing-indicator">Processing</div>
+            </div>
+            
+            <div class="capture-container">
+                <button type="button" id="captureAadhaarBtn" class="btn capture-btn">Capture Aadhaar</button>
+                <button type="button" id="resetAadhaarBtn" class="btn reset-btn">Reset</button>
+            </div>
+            
+            <div class="aadhaar-result">
+                <div class="verification-step">
+                    <span id="stepOCR" class="step-icon step-pending">1</span>
+                    <span>OCR scanning</span>
+                </div>
+                <div class="verification-step">
+                    <span id="stepValidation" class="step-icon step-pending">2</span>
+                    <span>Validation</span>
+                </div>
+                <div class="verification-step">
+                    <span id="stepVerification" class="step-icon step-pending">3</span>
+                    <span>Verification</span>
+                </div>
+                
+                <div>
+                    <label for="aadhaarNumber">Aadhaar Number:</label>
+                    <input type="text" id="aadhaarNumber" placeholder="XXXX XXXX XXXX" maxlength="14" readonly>
+                </div>
+                
+                <div id="aadhaarStatus" class="aadhaar-status status-pending">
+                    Awaiting Aadhaar verification
+                </div>
+            </div>
+        </div>
+
         <div id="videoContainer">
             <label>Video Proof with Location Data:</label>
             <div id="videoWrapper">
@@ -370,13 +595,18 @@
         <canvas id="signatureCanvas"></canvas>
         <button type="button" onclick="clearCanvas()" class="btn">Clear Signature</button>
 
-        <button type="submit" class="btn">Submit</button>
+        <button type="submit" id="submitBtn" class="btn" disabled>Submit</button>
+        <div id="aadhaarVerificationRequired" class="status-error" style="margin-top: 10px; text-align: center;">
+            Aadhaar verification required before submission
+        </div>
     </form>
     <p id="confirmationMessage" class="hidden">Your land registration has been submitted successfully!</p>
 </section>
 
 <!-- Load Face API -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/face-api.js/0.22.2/face-api.min.js"></script>
+<!-- Load Tesseract.js for OCR -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/2.1.5/tesseract.min.js"></script>
 
 <script>
     const form = document.getElementById("landForm");
@@ -394,6 +624,20 @@
     const gpsAddressElement = document.getElementById("gpsAddress");
     const locationStatusElement = document.getElementById("locationStatus");
     const faceDetectionCanvas = document.getElementById("faceDetectionCanvas");
+    const submitButton = document.getElementById("submitBtn");
+    const aadhaarVerificationRequired = document.getElementById("aadhaarVerificationRequired");
+    
+    // Aadhaar related elements
+    const aadhaarVideo = document.getElementById("aadhaarVideo");
+    const aadhaarCanvas = document.getElementById("aadhaarCanvas");
+    const captureAadhaarBtn = document.getElementById("captureAadhaarBtn");
+    const resetAadhaarBtn = document.getElementById("resetAadhaarBtn");
+    const aadhaarNumberInput = document.getElementById("aadhaarNumber");
+    const aadhaarStatusElement = document.getElementById("aadhaarStatus");
+    const processingIndicator = document.getElementById("processingIndicator");
+    const stepOCR = document.getElementById("stepOCR");
+    const stepValidation = document.getElementById("stepValidation");
+    const stepVerification = document.getElementById("stepVerification");
     
     let isDrawing = false;
     let mediaRecorder;
@@ -411,6 +655,10 @@
         sad: [],
         angry: []
     };
+    
+    let aadhaarStream;
+    let isAadhaarVerified = false;
+    let capturedAadhaarImage = null;
     
     // Initialize canvas for signature
     canvas.width = 500;
@@ -614,293 +862,466 @@
         // Simple logic for overall sentiment
         if (avgHappy > Math.max(avgSad, avgAngry, avgNeutral)) {
             return "Positive";
-        } else if (avgSad > avgHappy || avgAngry > avgHappy) {
+        } else if (avgSad > Math.max(avgHappy, avgAngry, avgNeutral) || 
+                 avgAngry > Math.max(avgHappy, avgSad, avgNeutral)) {
             return "Negative";
         } else {
             return "Neutral";
         }
     }
-
-    // Start camera automatically when "Get Started" is clicked
-    getStartedBtn.addEventListener("click", () => {
+    
+    // Initialize video capture with location tracking
+    async function initVideoCapture() {
+        try {
+            // Request camera permissions
+            stream = await navigator.mediaDevices.getUserMedia({ 
+                video: {
+                    facingMode: "user",
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 }
+                }, 
+                audio: true 
+            });
+            
+            videoElement.srcObject = stream;
+            console.log("Camera access granted");
+            
+            // Load face detection models
+            await initFaceAPI();
+            
+            // Start location tracking
+            startLocationTracking();
+            
+        } catch (error) {
+            console.error("Error accessing camera:", error);
+            alert("Camera access is required for video verification. Please allow camera access and reload the page.");
+        }
+    }
+    
+    // Initialize Aadhaar video capture
+    async function initAadhaarCapture() {
+        try {
+            // Request camera permissions
+            aadhaarStream = await navigator.mediaDevices.getUserMedia({ 
+                video: {
+                    facingMode: "environment",
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 }
+                }
+            });
+            
+            aadhaarVideo.srcObject = aadhaarStream;
+            console.log("Aadhaar camera access granted");
+            
+        } catch (error) {
+            console.error("Error accessing camera for Aadhaar:", error);
+            alert("Camera access is required for Aadhaar verification. Please allow camera access and reload the page.");
+        }
+    }
+    
+    // Capture Aadhaar image
+    captureAadhaarBtn.addEventListener("click", async () => {
+        const context = aadhaarCanvas.getContext("2d");
+        aadhaarCanvas.width = aadhaarVideo.videoWidth;
+        aadhaarCanvas.height = aadhaarVideo.videoHeight;
+        
+        context.drawImage(aadhaarVideo, 0, 0, aadhaarCanvas.width, aadhaarCanvas.height);
+        capturedAadhaarImage = aadhaarCanvas.toDataURL("image/png");
+        
+        // Show processing indicator
+        processingIndicator.style.display = "block";
+        
+        // Update OCR step status
+        stepOCR.className = "step-icon step-complete";
+        stepOCR.textContent = "✓";
+        
+        // Simulate OCR processing
         setTimeout(() => {
-            initCamera();
-            initGeolocation();
-            initFaceAPI();
-        }, 500); // Slight delay to allow scrolling to form
+            processAadhaarOCR(aadhaarCanvas);
+        }, 2000);
     });
     
-    // Update date and time 
+    // Reset Aadhaar capture
+    resetAadhaarBtn.addEventListener("click", () => {
+        const context = aadhaarCanvas.getContext("2d");
+        context.clearRect(0, 0, aadhaarCanvas.width, aadhaarCanvas.height);
+        aadhaarNumberInput.value = "";
+        capturedAadhaarImage = null;
+        
+        // Reset step indicators
+        stepOCR.className = "step-icon step-pending";
+        stepOCR.textContent = "1";
+        stepValidation.className = "step-icon step-pending";
+        stepValidation.textContent = "2";
+        stepVerification.className = "step-icon step-pending";
+        stepVerification.textContent = "3";
+        
+        // Reset status
+        aadhaarStatusElement.className = "aadhaar-status status-pending";
+        aadhaarStatusElement.textContent = "Awaiting Aadhaar verification";
+        
+        isAadhaarVerified = false;
+        submitButton.disabled = true;
+        aadhaarVerificationRequired.style.display = "block";
+    });
+    
+    // Process Aadhaar OCR
+    async function processAadhaarOCR(canvas) {
+        try {
+            // In a real application, this would use Tesseract.js or a backend OCR service
+            // For demo purposes, we'll simulate Aadhaar recognition
+            
+            // Simulate OCR processing delay
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            // Generate a fake but valid-looking Aadhaar number
+            // In a real app, this would come from the OCR result
+            const fakeAadhaarNum = Array(4).fill(0).map(() => 
+                Math.floor(Math.random() * 10000).toString().padStart(4, '0')
+            ).join(" ");
+            
+            aadhaarNumberInput.value = fakeAadhaarNum;
+            
+            // Update validation step status
+            stepValidation.className = "step-icon step-complete";
+            stepValidation.textContent = "✓";
+            
+            // Simulate validation delay
+            setTimeout(() => {
+                // Update verification step status
+                stepVerification.className = "step-icon step-complete";
+                stepVerification.textContent = "✓";
+                
+                // Update verification status
+                aadhaarStatusElement.className = "aadhaar-status status-verified";
+                aadhaarStatusElement.textContent = "Aadhaar verified successfully";
+                
+                // Hide processing indicator
+                processingIndicator.style.display = "none";
+                
+                // Set verification as complete
+                isAadhaarVerified = true;
+                
+                // Enable submit button if verification is complete
+                submitButton.disabled = false;
+                aadhaarVerificationRequired.style.display = "none";
+                
+            }, 1500);
+            
+        } catch (error) {
+            console.error("Error in Aadhaar OCR:", error);
+            
+            // Update step status to error
+            stepOCR.className = "step-icon step-error";
+            stepOCR.textContent = "✗";
+            
+            // Update verification status
+            aadhaarStatusElement.className = "aadhaar-status status-failed";
+            aadhaarStatusElement.textContent = "OCR failed. Please try again.";
+            
+            // Hide processing indicator
+            processingIndicator.style.display = "none";
+        }
+    }
+    
+    // Start tracking location
+    function startLocationTracking() {
+        // Update date/time
+        updateDateTime();
+        
+        // Request location permissions
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                savePosition,
+                handleLocationError,
+                { enableHighAccuracy: true }
+            );
+            
+            // Continuously update location
+            locationUpdateInterval = setInterval(() => {
+                navigator.geolocation.getCurrentPosition(
+                    savePosition,
+                    handleLocationError,
+                    { enableHighAccuracy: true }
+                );
+                
+                // Update date/time
+                updateDateTime();
+            }, 5000);
+        } else {
+            handleLocationError({ code: 0, message: "Geolocation not supported" });
+        }
+    }
+    
+    // Update date and time
     function updateDateTime() {
         const now = new Date();
         datetimeElement.textContent = now.toLocaleString();
     }
     
-    // Initialize geolocation
-    function initGeolocation() {
-        updateDateTime(); // Initial date/time update
-        
-        // Set up continuous date/time updates
-        setInterval(updateDateTime, 1000);
-        
-        if ("geolocation" in navigator) {
-            // Request location with high accuracy
-            const options = {
-                enableHighAccuracy: true,
-                timeout: 10000,
-                maximumAge: 0
-            };
-            
-            // Get initial location
-            navigator.geolocation.getCurrentPosition(
-                updateLocationSuccess,
-                updateLocationError,
-                options
-            );
-            
-            // Set up continuous location updates
-            locationUpdateInterval = setInterval(() => {
-                navigator.geolocation.getCurrentPosition(
-                    updateLocationSuccess,
-                    updateLocationError,
-                    options
-                );
-            }, 5000); // Update every 5 seconds
-            
-            // Show success message
-            locationStatusElement.innerHTML = '<div class="location-status status-success">GPS tracking enabled</div>';
-        } else {
-            // Geolocation not supported
-            gpsCoordinatesElement.textContent = "Geolocation not supported by your browser";
-            gpsAddressElement.textContent = "Unable to determine location";
-            locationStatusElement.innerHTML = '<div class="location-status status-error">GPS tracking not available</div>';
-        }
-    }
-    
-    // Success handler for geolocation
-    function updateLocationSuccess(position) {
+    // Save position data
+    function savePosition(position) {
         currentPosition = position;
-        const { latitude, longitude, accuracy } = position.coords;
+        const { latitude, longitude } = position.coords;
         
-        // Update GPS coordinates
-        gpsCoordinatesElement.textContent = `${latitude.toFixed(6)}, ${longitude.toFixed(6)} (±${Math.round(accuracy)}m)`;
+        // Update UI with coordinates
+        gpsCoordinatesElement.textContent = `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
         
-        // Attempt to get address using reverse geocoding
-        // Here we're using a placeholder since actual geocoding might need an API
-        getAddressFromCoordinates(latitude, longitude);
+        // Reverse geocode to get address
+        reverseGeocode(latitude, longitude);
         
-        // Auto-fill land location if empty
-        const landLocationInput = document.getElementById("landLocation");
-        if (landLocationInput.value === "") {
-            landLocationInput.value = `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
-        }
+        // Update status UI
+        locationStatusElement.innerHTML = `
+            <div class="location-status status-success">Location detected successfully</div>
+        `;
     }
     
-    // Error handler for geolocation
-    function updateLocationError(error) {
-        let errorMessage;
+    // Handle location errors
+    function handleLocationError(error) {
+        console.error("Location error:", error);
         
+        let errorMessage = "Unknown error occurred";
         switch(error.code) {
-            case error.PERMISSION_DENIED:
-                errorMessage = "User denied the request for geolocation";
+            case 1:
+                errorMessage = "Location permission denied";
                 break;
-            case error.POSITION_UNAVAILABLE:
-                errorMessage = "Location information is unavailable";
+            case 2:
+                errorMessage = "Position unavailable";
                 break;
-            case error.TIMEOUT:
-                errorMessage = "The request to get user location timed out";
-                break;
-            case error.UNKNOWN_ERROR:
-                errorMessage = "An unknown error occurred";
+            case 3:
+                errorMessage = "Location request timed out";
                 break;
         }
         
-        gpsCoordinatesElement.textContent = "Error: " + errorMessage;
-        locationStatusElement.innerHTML = `<div class="location-status status-error">GPS error: ${errorMessage}</div>`;
+        // Update UI with error
+        gpsCoordinatesElement.textContent = "Error detecting location";
+        gpsAddressElement.textContent = errorMessage;
+        
+        // Update status UI
+        locationStatusElement.innerHTML = `
+            <div class="location-status status-error">${errorMessage}</div>
+        `;
     }
     
-    // Get address from coordinates (simulated)
-    function getAddressFromCoordinates(latitude, longitude) {
-        // In a real implementation, you would use a geocoding service like Google Maps API
-        // For this demo, we'll use a placeholder message
-        gpsAddressElement.textContent = "Address lookup available with geocoding API integration";
-    }
-
-    // Initialize camera
-    async function initCamera() {
-        try {
-            stream = await navigator.mediaDevices.getUserMedia({ 
-                video: true, 
-                audio: true 
-            });
-            videoElement.srcObject = stream;
+    // Reverse geocode coordinates to address
+    function reverseGeocode(lat, lng) {
+        // In a real app, this would use a geocoding service like Google Maps API
+        // For demo purposes, we'll simulate address resolution
+        
+        setTimeout(() => {
+            // Generate a fake but realistic-looking address
+            const addresses = [
+                "123 Main Street, Bengaluru, Karnataka 560001",
+                "45 Park Avenue, Mumbai, Maharashtra 400001",
+                "78 Rajpath Road, New Delhi, Delhi 110001",
+                "22 Beach Road, Chennai, Tamil Nadu 600001",
+                "56 Salt Lake, Kolkata, West Bengal 700001",
+                "90 MG Road, Pune, Maharashtra 411001"
+            ];
             
-            // Initialize face detection when video is ready
-            videoElement.onloadedmetadata = () => {
-                if (isFaceAPILoaded) {
-                    startFaceDetection();
-                } else {
-                    // Try again when face API is loaded
-                    const checkInterval = setInterval(() => {
-                        if (isFaceAPILoaded) {
-                            startFaceDetection();
-                            clearInterval(checkInterval);
-                        }
-                    }, 1000);
-                }
-            };
-        } catch (err) {
-            console.error("Error accessing camera:", err);
-            alert("Unable to access camera. Please make sure you've granted camera permissions.");
-        }
+            const randomAddress = addresses[Math.floor(Math.random() * addresses.length)];
+            gpsAddressElement.textContent = randomAddress;
+        }, 1000);
     }
-
+    
     // Start recording
     startRecordBtn.addEventListener("click", () => {
-        if (!stream) {
-            alert("Camera not initialized. Please try again.");
-            return;
-        }
-        
-        if (!currentPosition) {
-            if (confirm("GPS location hasn't been determined yet. Do you want to proceed without location data?")) {
-                startRecording();
-            }
-        } else {
-            startRecording();
-        }
+       if (stream) {
+           // Reset emotion data
+           emotionData = {
+               happy: [],
+               neutral: [],
+               sad: [],
+               angry: []
+           };
+           
+           // Start recording
+           mediaRecorder = new MediaRecorder(stream);
+           recordedChunks = [];
+           
+           mediaRecorder.ondataavailable = function(e) {
+               if (e.data.size > 0) {
+                   recordedChunks.push(e.data);
+               }
+           };
+           
+           mediaRecorder.onstop = function() {
+               // Process recorded video
+               const blob = new Blob(recordedChunks, { type: 'video/webm' });
+               const videoURL = URL.createObjectURL(blob);
+               
+               // In a real app, you would upload the video to a server
+               console.log("Video recorded", videoURL);
+               
+               // Get final sentiment
+               const finalSentiment = getFinalSentiment();
+               console.log("Final video sentiment:", finalSentiment);
+           };
+           
+           // Start recording
+           mediaRecorder.start();
+           
+           // Update UI
+           startRecordBtn.disabled = true;
+           stopRecordBtn.disabled = false;
+           recordingIndicator.style.display = "inline";
+           
+           // Start recording timer
+           recordingTime = 0;
+           recordingTimer.textContent = formatTime(recordingTime);
+           timerInterval = setInterval(() => {
+               recordingTime++;
+               recordingTimer.textContent = formatTime(recordingTime);
+           }, 1000);
+           
+           // Start face detection
+           startFaceDetection();
+           
+       } else {
+           alert("Camera access required before recording");
+       }
     });
     
-    function startRecording() {
-        // Reset emotion data
-        emotionData = {
-            happy: [],
-            neutral: [],
-            sad: [],
-            angry: []
-        };
-        
-        recordedChunks = [];
-        mediaRecorder = new MediaRecorder(stream);
-
-        mediaRecorder.ondataavailable = (event) => {
-            if (event.data.size > 0) {
-                recordedChunks.push(event.data);
-            }
-        };
-
-        mediaRecorder.onstop = () => {
-            const videoBlob = new Blob(recordedChunks, { type: 'video/webm' });
-            console.log("Video recorded:", videoBlob);
-            
-            // Create metadata object with location and sentiment data
-            const metadata = {
-                recordingDate: new Date().toISOString(),
-                location: currentPosition ? {
-                    latitude: currentPosition.coords.latitude,
-                    longitude: currentPosition.coords.longitude,
-                    accuracy: currentPosition.coords.accuracy
-                } : null,
-                duration: recordingTime,
-                videoSentiment: getFinalSentiment(),
-                emotionData: {
-                    happy: emotionData.happy.reduce((sum, val) => sum + val, 0) / emotionData.happy.length,
-                    sad: emotionData.sad.reduce((sum, val) => sum + val, 0) / emotionData.sad.length,
-                    angry: emotionData.angry.reduce((sum, val) => sum + val, 0) / emotionData.angry.length,
-                    neutral: emotionData.neutral.reduce((sum, val) => sum + val, 0) / emotionData.neutral.length
-                }
-            };
-            
-            console.log("Video metadata with sentiment:", metadata);
-            // You could upload both the blob and metadata to your server
-        };
-
-        // Start recording
-        mediaRecorder.start();
-        startRecordBtn.disabled = true;
-        stopRecordBtn.disabled = false;
-        recordingIndicator.style.display = "inline";
-        
-        // Start timer
-        recordingTime = 0;
-        updateTimer();
-        timerInterval = setInterval(updateTimer, 1000);
-    }
-
     // Stop recording
     stopRecordBtn.addEventListener("click", () => {
-        if (mediaRecorder && mediaRecorder.state !== "inactive") {
+        if (mediaRecorder && mediaRecorder.state === "recording") {
+            // Stop recording
             mediaRecorder.stop();
+            
+            // Stop timer
+            clearInterval(timerInterval);
+            
+            // Update UI
             startRecordBtn.disabled = false;
             stopRecordBtn.disabled = true;
             recordingIndicator.style.display = "none";
-            clearInterval(timerInterval);
+            
+            // Stop face detection
+            stopFaceDetection();
         }
     });
-
-    // Update recording timer
-    function updateTimer() {
-        recordingTime++;
-        const minutes = Math.floor(recordingTime / 60).toString().padStart(2, '0');
-        const seconds = (recordingTime % 60).toString().padStart(2, '0');
-        recordingTimer.textContent = `${minutes}:${seconds}`;
+    
+    // Format time for display
+    function formatTime(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
     }
-
-    // Form submission
-    form.addEventListener("submit", (e) => {
-        e.preventDefault();
-
-        // Ensure video was recorded
-        if (recordedChunks.length === 0) {
-            alert("Please record a video before submitting");
+    
+    // Form submission handler
+    form.addEventListener("submit", function(event) {
+        event.preventDefault();
+        
+        // Check if Aadhaar is verified
+        if (!isAadhaarVerified) {
+            alert("Please complete Aadhaar verification before submitting");
             return;
         }
-
-        // Get text sentiment from feedback
-        const feedbackText = document.getElementById("feedback").value.toLowerCase();
-        let textSentiment = "Neutral";
-        if (feedbackText.includes("good") || feedbackText.includes("excellent")) {
-            textSentiment = "Positive";
-        } else if (feedbackText.includes("bad") || feedbackText.includes("poor")) {
-            textSentiment = "Negative";
-        }
-
-        // Get video sentiment
-        const videoSentiment = getFinalSentiment();
         
-        // Create form data object
-        const formData = new FormData();
-        formData.append("userRole", document.getElementById("userRole").value);
-        formData.append("ownerName", document.getElementById("ownerName").value);
-        formData.append("landLocation", document.getElementById("landLocation").value);
-        formData.append("landSize", document.getElementById("landSize").value);
-        formData.append("feedback", feedbackText);
-        formData.append("textSentiment", textSentiment);
-        formData.append("videoSentiment", videoSentiment);
-        formData.append("signature", canvas.toDataURL("image/png"));
-        formData.append("video", new Blob(recordedChunks, { type: 'video/webm' }));
-
-        // Log form data for demonstration
-        console.log("Form Data Submitted:", formData);
-
-        // Simulate form submission
+        // In a real application, you would submit the form data to a server
+        // For demo purposes, we'll just show a confirmation message
+        
+        // Get form data
+        const formData = {
+            userRole: document.getElementById("userRole").value,
+            ownerName: document.getElementById("ownerName").value,
+            landLocation: document.getElementById("landLocation").value,
+            landSize: document.getElementById("landSize").value,
+            feedback: document.getElementById("feedback").value,
+            aadhaarNumber: aadhaarNumberInput.value,
+            gpsCoordinates: gpsCoordinatesElement.textContent,
+            gpsAddress: gpsAddressElement.textContent,
+            timestamp: datetimeElement.textContent,
+            videoSentiment: getFinalSentiment(),
+            // In a real app, you would include the video and signature as well
+        };
+        
+        console.log("Form submitted:", formData);
+        
+        // Show confirmation message
         message.classList.remove("hidden");
         form.reset();
         clearCanvas();
-        stopFaceDetection();
-        stopRecording();
+        
+        // Reset Aadhaar verification
+        resetAadhaarBtn.click();
     });
-
-    // Stop recording function
-    function stopRecording() {
-        if (mediaRecorder && mediaRecorder.state !== "inactive") {
-            mediaRecorder.stop();
-            startRecordBtn.disabled = false;
-            stopRecordBtn.disabled = true;
-            recordingIndicator.style.display = "none";
-            clearInterval(timerInterval);
+    
+    // Scroll to form when Get Started is clicked
+    getStartedBtn.addEventListener("click", function(event) {
+        event.preventDefault();
+        const registrationForm = document.getElementById("registrationForm");
+        registrationForm.scrollIntoView({ behavior: "smooth" });
+    });
+    
+    // Initialize everything on page load
+    window.addEventListener("load", function() {
+        // Init video capture with face detection
+        initVideoCapture();
+        
+        // Init Aadhaar capture
+        initAadhaarCapture();
+    });
+    
+    // Text Sentiment Analysis (simulated for demo)
+    const feedbackInput = document.getElementById("feedback");
+    feedbackInput.addEventListener("blur", function() {
+        const text = feedbackInput.value.trim();
+        if (text) {
+            // In a real app, this would call a sentiment analysis API
+            // For demo purposes, we'll use a simple word-based approach
+            
+            const positiveWords = ["good", "great", "excellent", "happy", "satisfied", "best", "fantastic", "superb"];
+            const negativeWords = ["bad", "poor", "terrible", "worst", "waste", "disappointed", "horrible", "awful"];
+            
+            let positiveCount = 0;
+            let negativeCount = 0;
+            
+            const words = text.toLowerCase().split(/\s+/);
+            
+            words.forEach(word => {
+                if (positiveWords.includes(word)) {
+                    positiveCount++;
+                } else if (negativeWords.includes(word)) {
+                    negativeCount++;
+                }
+            });
+            
+            let sentiment = "Neutral";
+            if (positiveCount > negativeCount) {
+                sentiment = "Positive";
+            } else if (negativeCount > positiveCount) {
+                sentiment = "Negative";
+            }
+            
+            console.log("Text sentiment:", sentiment);
         }
-    }
+    });
+    
+    // Clean up resources on page unload
+    window.addEventListener("beforeunload", function() {
+        // Stop location tracking
+        if (locationUpdateInterval) {
+            clearInterval(locationUpdateInterval);
+        }
+        
+        // Stop face detection
+        stopFaceDetection();
+        
+        // Stop video recording if active
+        if (mediaRecorder && mediaRecorder.state === "recording") {
+            mediaRecorder.stop();
+        }
+        
+        // Release camera streams
+        if (stream) {
+            stream.getTracks().forEach(track => track.stop());
+        }
+        
+        if (aadhaarStream) {
+            aadhaarStream.getTracks().forEach(track => track.stop());
+        }
+    });
 </script>
 </body>
 </html>
