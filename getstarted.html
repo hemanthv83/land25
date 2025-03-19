@@ -3,1325 +3,1198 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Land Registration</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Land Registration Form</title>
     <style>
         /* General Styles */
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
             margin: 0;
             padding: 0;
-            text-align: center;
-            background-color: #f4f4f4;
         }
-
-        header {
-            background-color: #2c3e50;
-            color: white;
-            padding: 15px 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            left: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px;
-            max-width: 1200px;
-            margin: auto;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-        }
-
-        .logo img {
-            height: 40px;
-            margin-right: 10px;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            padding: 0;
-        }
-
-        .nav-links li {
-            margin-left: 20px;
-        }
-
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            font-size: 1rem;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: #f4f4f4;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 8px 15px;
-            background: #f39c12;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 1rem;
-            transition: background 0.3s;
-        }
-
-        .btn:hover {
-            background: #e67e22;
-        }
-
-        .form-section {
-            background: white;
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
             padding: 20px;
-            max-width: 500px;
-            margin: 70px auto;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            text-align: left;
+            background-color: #fff;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
         }
-
+        
+        h1, h2, h3, h4 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        
+        .form-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
         label {
             display: block;
-            margin: 10px 0 5px;
-        }
-
-        input, select {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        canvas {
-            border: 1px solid black;
-            width: 100%;
-            height: 150px;
-            margin-top: 10px;
-        }
-
-        .hidden {
-            display: none;
-            color: green;
-            margin-top: 10px;
-        }
-
-        /* Video styling */
-        #videoContainer {
-            margin: 15px 0;
-        }
-
-        #videoElement {
-            width: 100%;
-            height: 300px;
-            background-color: #000;
-            border-radius: 5px;
-        }
-
-        .video-controls {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 10px;
-        }
-
-        .video-timer {
-            font-size: 14px;
-            margin-top: 5px;
-            color: #666;
-        }
-
-        .recording-indicator {
-            display: none;
-            color: red;
-            font-weight: bold;
-            margin-left: 10px;
-        }
-        
-        /* Location info */
-        .location-info {
-            background-color: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 8px;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            font-size: 12px;
-            text-align: left;
-            border-bottom-left-radius: 5px;
-            border-bottom-right-radius: 5px;
-        }
-        
-        #videoWrapper {
-            position: relative;
-        }
-        
-        .location-status {
-            margin-top: 5px;
-            padding: 5px 10px;
-            border-radius: 3px;
-            font-size: 12px;
-        }
-        
-        .status-success {
-            background-color: #27ae60;
-            color: white;
-        }
-        
-        .status-error {
-            background-color: #e74c3c;
-            color: white;
-        }
-
-        /* Sentiment Analysis Styling */
-        .sentiment-container {
-            margin-top: 15px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-        }
-
-        .sentiment-title {
-            font-weight: bold;
             margin-bottom: 5px;
+            font-weight: 600;
         }
-
-        .emotion-bar {
-            height: 20px;
-            margin: 5px 0;
-            border-radius: 3px;
-            display: flex;
-            align-items: center;
-            overflow: hidden;
-            background-color: #eee;
+        
+        input[type="text"], input[type="email"], input[type="tel"], input[type="date"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
         }
-
-        .emotion-fill {
-            height: 100%;
-            display: flex;
-            align-items: center;
-            padding-left: 5px;
+        
+        textarea {
+            height: 100px;
+        }
+        
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #3498db;
             color: white;
-            font-size: 12px;
-            transition: width 0.3s ease;
-        }
-
-        .emotion-label {
-            display: flex;
-            justify-content: space-between;
-            font-size: 12px;
-        }
-
-        .sentiment-summary {
-            margin-top: 10px;
-            padding: 5px;
-            border-radius: 3px;
-            text-align: center;
-        }
-
-        .positive-summary {
-            background-color: #d4edda;
-            color: #155724;
-        }
-
-        .neutral-summary {
-            background-color: #fff3cd;
-            color: #856404;
-        }
-
-        .negative-summary {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
-
-        #faceDetectionCanvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 300px;
-            z-index: 10;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
         }
         
-        /* Aadhaar Recognition Styling */
-        .aadhaar-container {
-            margin-top: 20px;
-            border: 1px solid #ccc;
-            padding: 15px;
-            border-radius: 5px;
-            background-color: #f9f9f9;
+        .button:hover {
+            background-color: #2980b9;
         }
         
-        .aadhaar-title {
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #2c3e50;
-            text-align: center;
-        }
-        
-        .aadhaar-video-container {
-            position: relative;
-            margin-bottom: 15px;
-        }
-        
-        #aadhaarVideo {
-            width: 100%;
-            height: 200px;
-            background-color: #000;
-            border-radius: 5px;
-        }
-        
-        #aadhaarCanvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 200px;
-            z-index: 15;
-        }
-        
-        .capture-container {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 15px;
-        }
-        
-        .capture-btn {
-            flex-grow: 1;
-            margin-right: 5px;
-        }
-        
-        .reset-btn {
-            flex-grow: 1;
-            margin-left: 5px;
+        .button.secondary {
             background-color: #95a5a6;
         }
         
-        .aadhaar-result {
-            padding: 10px;
+        .button.secondary:hover {
+            background-color: #7f8c8d;
+        }
+        
+        .button:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+        
+        /* Progress Bar */
+        .progress-container {
+            margin-bottom: 30px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            background-color: #ecf0f1;
+            height: 10px;
             border-radius: 5px;
-            background-color: #f0f0f0;
-            margin-top: 10px;
-            font-size: 14px;
+            margin-bottom: 15px;
         }
         
-        .aadhaar-number {
-            font-size: 16px;
-            font-weight: bold;
-            color: #2c3e50;
-            margin-top: 5px;
-            letter-spacing: 1px;
-        }
-        
-        .aadhaar-status {
-            margin-top: 10px;
-            padding: 5px;
-            border-radius: 3px;
-            text-align: center;
-            font-weight: bold;
-        }
-        
-        .status-verified {
-            background-color: #d4edda;
-            color: #155724;
-        }
-        
-        .status-pending {
-            background-color: #fff3cd;
-            color: #856404;
-        }
-        
-        .status-failed {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
-        
-        .aadhaar-instructions {
-            font-size: 12px;
-            color: #666;
-            margin-bottom: 10px;
-            text-align: center;
-            font-style: italic;
-        }
-        
-        .scan-guide {
-            border: 2px dashed #3498db;
-            position: absolute;
-            top: 10%;
-            left: 10%;
-            width: 80%;
-            height: 80%;
-            z-index: 16;
-            pointer-events: none;
-        }
-        
-        .scan-guide-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 3px;
-            font-size: 12px;
-            pointer-events: none;
-        }
-        
-        .processing-indicator {
-            display: none;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 10px 20px;
+        .progress-bar-fill {
+            height: 100%;
+            background-color: #3498db;
             border-radius: 5px;
-            z-index: 20;
+            width: 0%;
+            transition: width 0.3s ease-in-out;
         }
         
-        .processing-indicator::after {
-            content: "...";
-            animation: dots 1.5s infinite;
-        }
-        
-        @keyframes dots {
-            0%, 20% { content: "."; }
-            40% { content: ".."; }
-            60%, 100% { content: "..."; }
-        }
-        
-        .verification-step {
+        .progress-steps {
             display: flex;
-            align-items: center;
-            margin: 5px 0;
+            justify-content: space-between;
+            position: relative;
         }
         
-        .step-icon {
-            width: 20px;
-            height: 20px;
-            margin-right: 10px;
+        .progress-steps::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: #ddd;
+            z-index: 1;
+        }
+        
+        .step {
+            width: 30px;
+            height: 30px;
+            background-color: #ecf0f1;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 12px;
+            font-weight: bold;
+            position: relative;
+            z-index: 2;
+            transition: background-color 0.3s;
+        }
+        
+        .step.active {
+            background-color: #3498db;
             color: white;
         }
         
+        .step.completed {
+            background-color: #2ecc71;
+            color: white;
+        }
+        
+        .step-label {
+            margin-top: 5px;
+            font-size: 12px;
+            text-align: center;
+        }
+        
+        /* Verification Elements */
+        .verification-steps {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+        }
+        
+        .verification-step {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #f1f1f1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            position: relative;
+        }
+        
+        .verification-step::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: 100%;
+            width: 100%;
+            height: 2px;
+            background-color: #ddd;
+            transform: translateY(-50%);
+        }
+        
+        .verification-step:first-child::before {
+            display: none;
+        }
+        
         .step-pending {
-            background-color: #95a5a6;
+            background-color: #f1f1f1;
+        }
+        
+        .step-in-progress {
+            background-color: #f39c12;
+            color: white;
+            animation: spin 1s linear infinite;
         }
         
         .step-complete {
             background-color: #2ecc71;
+            color: white;
         }
         
         .step-error {
             background-color: #e74c3c;
+            color: white;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Status Indicators */
+        .status-pending {
+            color: #f39c12;
+        }
+        
+        .status-verified, .status-success {
+            color: #2ecc71;
+        }
+        
+        .status-error {
+            color: #e74c3c;
+        }
+        
+        /* Biometric Styles */
+        .fingerprint-container {
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .fingerprint-icon {
+            font-size: 60px;
+            color: #3498db;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        
+        .fingerprint-status {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        
+        /* Face Authentication */
+        .face-auth-container {
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .face-match-indicator {
+            margin: 10px 0;
+            background-color: #ecf0f1;
+            height: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .face-match-fill {
+            height: 100%;
+            background-color: #3498db;
+            width: 0%;
+            transition: width 0.5s ease-in-out;
+        }
+        
+        /* Video Recording */
+        .video-recording-container {
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .recording-indicator {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background-color: #e74c3c;
+            border-radius: 50%;
+            margin-right: 10px;
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .sentiment-analysis {
+            margin-top: 20px;
+        }
+        
+        .sentiment-bar {
+            height: 20px;
+            background-color: #ecf0f1;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+        
+        .sentiment-fill {
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease-in-out;
+        }
+        
+        .happy-fill {
+            background-color: #2ecc71;
+        }
+        
+        .neutral-fill {
+            background-color: #3498db;
+        }
+        
+        .sad-fill {
+            background-color: #f39c12;
+        }
+        
+        .angry-fill {
+            background-color: #e74c3c;
+        }
+        
+        .sentiment-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+        }
+        
+        .sentiment-summary {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .positive-summary {
+            background-color: rgba(46, 204, 113, 0.1);
+            color: #27ae60;
+        }
+        
+        .negative-summary {
+            background-color: rgba(231, 76, 60, 0.1);
+            color: #c0392b;
+        }
+        
+        /* Signature Pad */
+        .signature-container {
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .signature-pad {
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+        }
+        
+        /* Consent Tabs */
+        .consent-tabs {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        
+        .consent-tab {
+            padding: 10px 20px;
+            background-color: #f1f1f1;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+        }
+        
+        .consent-tab.active {
+            background-color: #fff;
+            border-bottom: 2px solid #3498db;
+        }
+        
+        .consent-content {
+            display: none;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-top: none;
+        }
+        
+        .consent-content.active {
+            display: block;
+        }
+        
+        /* Navigation */
+        .form-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .form-section {
+                padding: 15px;
+            }
+            
+            .button {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            
+            .form-navigation {
+                flex-direction: column;
+            }
+            
+            .verification-steps {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .verification-step {
+                margin-bottom: 10px;
+            }
+            
+            .verification-step::before {
+                width: 2px;
+                height: 20px;
+                top: 0;
+                left: 50%;
+                transform: translateX(-50%);
+            }
         }
     </style>
 </head>
 <body>
-<header>
-    <nav class="container">
-        <div class="logo">
-            <img src="/api/placeholder/40/40" alt="Logo"> Digital Land Registry
-        </div>
-        <ul class="nav-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="#services">Services</a></li>
-            <li><a href="#process">Process</a></li>
-            <li><a href="#contact">Contact</a></li>
-            <li><a href="dashboard.html">Dashboard</a></li>
-            <li><a href="login.html" class="btn">Login/Register</a></li>
-        </ul>
-    </nav>
-</header>
-
-<section class="hero" id="home">
-    <h1>Digital Land Registration Portal</h1>
-    <p>Register your land online with our secure, efficient, and paperless process.</p>
-    <a href="#registrationForm" class="btn" id="getStartedBtn">Get Started</a>
-</section>
-
-<section id="registrationForm" class="form-section">
-    <h2>Land Registration Form</h2>
-    <form id="landForm">
-        <!-- Aadhaar Card Verification Section -->
-        <div class="aadhaar-container">
-            <div class="aadhaar-title">Aadhaar Card Verification</div>
-            <div class="aadhaar-instructions">
-                Please position your Aadhaar card within the frame. Hold it steady for OCR scanning.
+    <div class="container">
+        <h1>Land Registration Form</h1>
+        
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div id="progressBarFill" class="progress-bar-fill"></div>
             </div>
-            
-            <div class="aadhaar-video-container">
-                <video id="aadhaarVideo" autoplay muted></video>
-                <canvas id="aadhaarCanvas"></canvas>
-                <div class="scan-guide">
-                    <span class="scan-guide-text">Align Aadhaar card here</span>
-                </div>
-                <div id="processingIndicator" class="processing-indicator">Processing</div>
+            <div class="progress-steps">
+                <div class="step active" id="step1">1</div>
+                <div class="step" id="step2">2</div>
+                <div class="step" id="step3">3</div>
+                <div class="step" id="step4">4</div>
+                <div class="step" id="step5">5</div>
             </div>
-            
-            <div class="capture-container">
-                <button type="button" id="captureAadhaarBtn" class="btn capture-btn">Capture Aadhaar</button>
-                <button type="button" id="resetAadhaarBtn" class="btn reset-btn">Reset</button>
-            </div>
-            
-            <div class="aadhaar-result">
-                <div class="verification-step">
-                    <span id="stepOCR" class="step-icon step-pending">1</span>
-                    <span>OCR scanning</span>
-                </div>
-                <div class="verification-step">
-                    <span id="stepValidation" class="step-icon step-pending">2</span>
-                    <span>Validation</span>
-                </div>
-                <div class="verification-step">
-                    <span id="stepVerification" class="step-icon step-pending">3</span>
-                    <span>Verification</span>
-                </div>
-                
-                <div>
-                    <label for="aadhaarNumber">Aadhaar Number:</label>
-                    <input type="text" id="aadhaarNumber" placeholder="XXXX XXXX XXXX" maxlength="14" readonly>
-                </div>
-                
-                <div id="aadhaarStatus" class="aadhaar-status status-pending">
-                    Awaiting Aadhaar verification
-                </div>
+            <div class="progress-steps">
+                <div class="step-label">Identity</div>
+                <div class="step-label">Biometric</div>
+                <div class="step-label">Property</div>
+                <div class="step-label">Verification</div>
+                <div class="step-label">Submission</div>
             </div>
         </div>
-
-        <div id="videoContainer">
-            <label>Video Proof with Location Data:</label>
-            <div id="videoWrapper">
-                <video id="videoElement" autoplay muted></video>
-                <canvas id="faceDetectionCanvas"></canvas>
-                <div id="locationInfo" class="location-info">
-                    <div>Date & Time: <span id="datetime">Waiting...</span></div>
-                    <div>Location: <span id="gpsCoordinates">Waiting for GPS...</span></div>
-                    <div>Address: <span id="gpsAddress">Resolving address...</span></div>
-                </div>
-            </div>
-            <div id="locationStatus"></div>
-            <div class="video-controls">
-                <button type="button" id="startRecordBtn" class="btn">Record Video</button>
-                <button type="button" id="stopRecordBtn" class="btn" disabled>Stop Recording</button>
-                <span id="recordingIndicator" class="recording-indicator">● Recording</span>
-            </div>
-            <div class="video-timer" id="recordingTimer">00:00</div>
-
-            <!-- Video Sentiment Analysis Container -->
-            <div id="sentimentContainer" class="sentiment-container">
-                <div class="sentiment-title">Video AI Sentiment Analysis</div>
-                <div>
-                    <div class="emotion-label">
-                        <span>Happy</span>
-                        <span id="happyValue">0%</span>
-                    </div>
-                    <div class="emotion-bar">
-                        <div id="happyFill" class="emotion-fill" style="width: 0%; background-color: #28a745;"></div>
-                    </div>
-                </div>
-                <div>
-                    <div class="emotion-label">
-                        <span>Neutral</span>
-                        <span id="neutralValue">0%</span>
-                    </div>
-                    <div class="emotion-bar">
-                        <div id="neutralFill" class="emotion-fill" style="width: 0%; background-color: #ffc107;"></div>
-                    </div>
-                </div>
-                <div>
-                    <div class="emotion-label">
-                        <span>Sad</span>
-                        <span id="sadValue">0%</span>
-                    </div>
-                    <div class="emotion-bar">
-                        <div id="sadFill" class="emotion-fill" style="width: 0%; background-color: #dc3545;"></div>
-                    </div>
-                </div>
-                <div>
-                    <div class="emotion-label">
-                        <span>Angry</span>
-                        <span id="angryValue">0%</span>
-                    </div>
-                    <div class="emotion-bar">
-                        <div id="angryFill" class="emotion-fill" style="width: 0%; background-color: #6f42c1;"></div>
-                    </div>
-                </div>
-                <div id="sentimentSummary" class="sentiment-summary neutral-summary">
-                    Overall: Waiting for recording...
-                </div>
-            </div>
-        </div>
-        <label for="userRole">Select Role:</label>
-        <select id="userRole" required>
-            <option value="seller">Seller</option>
-            <option value="buyer">Buyer</option>
-        </select>
-
-        <label for="ownerName">Full Name:</label>
-        <input type="text" id="ownerName" required>
-
-        <label for="landLocation">Land Location:</label>
-        <input type="text" id="landLocation" required>
-
-        <label for="landSize">Land Size (in sq. meters):</label>
-        <input type="number" id="landSize" required>
-
-        <label for="feedback">Feedback (for text sentiment analysis):</label>
-        <input type="text" id="feedback" required>
-
-        <label>Draw Your Digital Signature:</label>
-        <canvas id="signatureCanvas"></canvas>
-        <button type="button" onclick="clearCanvas()" class="btn">Clear Signature</button>
-
-        <button type="submit" id="submitBtn" class="btn" disabled>Submit</button>
-        <div id="aadhaarVerificationRequired" class="status-error" style="margin-top: 10px; text-align: center;">
-            Aadhaar verification required before submission
-        </div>
-    </form>
-    <p id="confirmationMessage" class="hidden">Your land registration has been submitted successfully!</p>
-</section>
-
-<!-- Load Face API -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/face-api.js/0.22.2/face-api.min.js"></script>
-<!-- Load Tesseract.js for OCR -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/2.1.5/tesseract.min.js"></script>
-
-<script>
-    const form = document.getElementById("landForm");
-    const message = document.getElementById("confirmationMessage");
-    const canvas = document.getElementById("signatureCanvas");
-    const ctx = canvas.getContext("2d");
-    const getStartedBtn = document.getElementById("getStartedBtn");
-    const videoElement = document.getElementById("videoElement");
-    const startRecordBtn = document.getElementById("startRecordBtn");
-    const stopRecordBtn = document.getElementById("stopRecordBtn");
-    const recordingIndicator = document.getElementById("recordingIndicator");
-    const recordingTimer = document.getElementById("recordingTimer");
-    const datetimeElement = document.getElementById("datetime");
-    const gpsCoordinatesElement = document.getElementById("gpsCoordinates");
-    const gpsAddressElement = document.getElementById("gpsAddress");
-    const locationStatusElement = document.getElementById("locationStatus");
-    const faceDetectionCanvas = document.getElementById("faceDetectionCanvas");
-    const submitButton = document.getElementById("submitBtn");
-    const aadhaarVerificationRequired = document.getElementById("aadhaarVerificationRequired");
-    
-    // Aadhaar related elements
-    const aadhaarVideo = document.getElementById("aadhaarVideo");
-    const aadhaarCanvas = document.getElementById("aadhaarCanvas");
-    const captureAadhaarBtn = document.getElementById("captureAadhaarBtn");
-    const resetAadhaarBtn = document.getElementById("resetAadhaarBtn");
-    const aadhaarNumberInput = document.getElementById("aadhaarNumber");
-    const aadhaarStatusElement = document.getElementById("aadhaarStatus");
-    const processingIndicator = document.getElementById("processingIndicator");
-    const stepOCR = document.getElementById("stepOCR");
-    const stepValidation = document.getElementById("stepValidation");
-    const stepVerification = document.getElementById("stepVerification");
-    
-    let isDrawing = false;
-    let mediaRecorder;
-    let recordedChunks = [];
-    let stream;
-    let timerInterval;
-    let recordingTime = 0;
-    let locationUpdateInterval;
-    let currentPosition = null;
-    let faceDetectionInterval;
-    let isFaceAPILoaded = false;
-    let emotionData = {
-        happy: [],
-        neutral: [],
-        sad: [],
-        angry: []
-    };
-    
-    let aadhaarStream;
-    let isAadhaarVerified = false;
-    let capturedAadhaarImage = null;
-    
-    // Initialize canvas for signature
-    canvas.width = 500;
-    canvas.height = 150;
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = "#000";
-    
-    canvas.addEventListener("mousedown", startDrawing);
-    canvas.addEventListener("touchstart", startDrawing);
-    
-    canvas.addEventListener("mouseup", stopDrawing);
-    canvas.addEventListener("touchend", stopDrawing);
-    
-    canvas.addEventListener("mousemove", draw);
-    canvas.addEventListener("touchmove", draw);
-    
-    function startDrawing(event) {
-        event.preventDefault();
-        isDrawing = true;
         
-        const x = event.type.includes('mouse') ? event.offsetX : event.touches[0].clientX - canvas.getBoundingClientRect().left;
-        const y = event.type.includes('mouse') ? event.offsetY : event.touches[0].clientY - canvas.getBoundingClientRect().top;
-        
-        ctx.beginPath();
-        ctx.moveTo(x, y);
-    }
-    
-    function stopDrawing() {
-        isDrawing = false;
-    }
-    
-    function draw(event) {
-        if (!isDrawing) return;
-        
-        event.preventDefault();
-        const x = event.type.includes('mouse') ? event.offsetX : event.touches[0].clientX - canvas.getBoundingClientRect().left;
-        const y = event.type.includes('mouse') ? event.offsetY : event.touches[0].clientY - canvas.getBoundingClientRect().top;
-        
-        ctx.lineTo(x, y);
-        ctx.stroke();
-    }
-
-    function clearCanvas() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-    }
-
-    // Initialize Face-API.js
-    async function initFaceAPI() {
-        try {
-            await faceapi.nets.tinyFaceDetector.loadFromUri('https://cdnjs.cloudflare.com/ajax/libs/face-api.js/models/tiny_face_detector_model-weights_manifest.json');
-            await faceapi.nets.faceExpressionNet.loadFromUri('https://cdnjs.cloudflare.com/ajax/libs/face-api.js/models/face_expression_model-weights_manifest.json');
-            
-            console.log("Face API models loaded");
-            isFaceAPILoaded = true;
-            
-            // Set up canvas
-            faceDetectionCanvas.width = videoElement.videoWidth;
-            faceDetectionCanvas.height = videoElement.videoHeight;
-            
-        } catch (error) {
-            console.error("Error loading Face API models:", error);
-            alert("Failed to load facial recognition models. Sentiment analysis may not work.");
-        }
-    }
-    
-    // Start face detection
-    function startFaceDetection() {
-        if (!isFaceAPILoaded) {
-            console.warn("Face API not loaded yet");
-            return;
-        }
-        
-        faceDetectionInterval = setInterval(async () => {
-            if (videoElement.readyState === 4) {
-                const canvasCtx = faceDetectionCanvas.getContext('2d');
-                faceDetectionCanvas.width = videoElement.videoWidth;
-                faceDetectionCanvas.height = videoElement.videoHeight;
+        <form id="landForm">
+            <!-- Step 1: Identity Information -->
+            <div id="identitySection" class="form-section">
+                <h2>Step 1: Identity Information</h2>
                 
-                // Detect faces with expressions
-                const detections = await faceapi.detectAllFaces(
-                    videoElement, 
-                    new faceapi.TinyFaceDetectorOptions()
-                ).withFaceExpressions();
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" name="fullName" required>
+                </div>
                 
-                if (detections.length > 0) {
-                    // Clear canvas
-                    canvasCtx.clearRect(0, 0, faceDetectionCanvas.width, faceDetectionCanvas.height);
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="mobile">Mobile Number</label>
+                    <input type="tel" id="mobile" name="mobile" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="dob">Date of Birth</label>
+                    <input type="date" id="dob" name="dob" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="address">Permanent Address</label>
+                    <textarea id="address" name="address" required></textarea>
+                </div>
+                
+                <div class="form-navigation">
+                    <div></div>
+                    <button type="button" id="identityNextBtn" class="button">Next</button>
+                </div>
+            </div>
+            
+            <!-- Step 2: Biometric Verification -->
+            <div id="biometricSection" class="form-section" style="display: none;">
+                <h2>Step 2: Biometric Verification</h2>
+                
+                <!-- Aadhaar Verification -->
+                <div class="form-group">
+                    <h3>Aadhaar Verification</h3>
                     
-                    // Draw detections
-                    detections.forEach(detection => {
-                        // Draw face box
-                        const box = detection.detection.box;
-                        canvasCtx.strokeStyle = "#3498db";
-                        canvasCtx.lineWidth = 2;
-                        canvasCtx.strokeRect(box.x, box.y, box.width, box.height);
+                    <div class="form-group">
+                        <label for="aadhaarNumber">Aadhaar Number</label>
+                        <input type="text" id="aadhaarNumber" name="aadhaarNumber" readonly>
+                        <div id="aadhaarStatus" class="aadhaar-status status-pending">Awaiting Aadhaar verification</div>
+                    </div>
+                    
+                    <div class="verification-steps">
+                        <div id="stepOCR" class="verification-step step-pending">1</div>
+                        <div id="stepValidation" class="verification-step step-pending">2</div>
+                        <div id="stepVerification" class="verification-step step-pending">3</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <button type="button" id="captureAadhaarBtn" class="button">Capture Aadhaar</button>
+                        <button type="button" id="resetAadhaarBtn" class="button secondary">Reset</button>
+                    </div>
+                    
+                    <div id="processingIndicator" style="display: none;">
+                        <p>Processing...</p>
+                    </div>
+                    
+                    <!-- Aadhaar Capture Interface -->
+                    <div id="aadhaarCaptureInterface" style="display: none; margin: 20px 0; border: 1px solid #ddd; padding: 15px; border-radius: 5px;">
+                        <h4>Aadhaar Card Capture</h4>
+                        <p>Position your Aadhaar card clearly in the camera view and take a picture.</p>
                         
-                        // Record emotions if recording
-                        if (mediaRecorder && mediaRecorder.state === "recording") {
-                            const expressions = detection.expressions;
+                        <div class="camera-container" style="margin: 15px 0;">
+                            <video id="aadhaarVideo" style="width: 100%; max-width: 500px; border: 1px solid #ccc;" autoplay></video>
+                            <canvas id="aadhaarCanvas" style="display: none; width: 100%; max-width: 500px; border: 1px solid #ccc;"></canvas>
+                        </div>
+                        
+                        <div class="camera-controls">
+                            <button type="button" id="aadhaarCaptureBtn" class="button" disabled>Capture Image</button>
+                            <button type="button" id="aadhaarConfirmBtn" class="button primary-button" style="display: none;">Confirm</button>
+                            <button type="button" id="aadhaarRetakeBtn" class="button" style="display: none;">Retake</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Fingerprint Scanning -->
+                <div class="form-group">
+                    <h3>Fingerprint Verification</h3>
+                    
+                    <div class="fingerprint-container">
+                        <div class="fingerprint-icon">👆</div>
+                        <div class="form-group">
+                            <label>Fingerprint Quality</label>
+                            <input type="text" id="fingerprintQuality" readonly>
+                        </div>
+                        <div id="fingerprintStatus" class="fingerprint-status">Ready to scan</div>
+                        <div class="form-group">
+                            <button type="button" id="scanFingerprintBtn" class="button">Scan Fingerprint</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Face Authentication -->
+                <div class="form-group">
+                    <h3>Face Authentication</h3>
+                    
+                    <div class="face-auth-container">
+                        <div class="form-group">
+                            <label>Face Match</label>
+                            <div class="face-match-indicator">
+                                <div id="faceMatchIndicator" class="face-match-fill" style="width: 0%;"></div>
+                            </div>
+                            <div class="face-match-percentage">Match: <span id="faceMatchPercentage">0%</span></div>
+                        </div>
+                        <div id="faceAuthStatus" class="face-auth-status">Ready to verify</div>
+                        <div class="form-group">
+                            <button type="button" id="verifyFaceBtn" class="button">Verify Face</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-navigation">
+                    <button type="button" id="biometricPrevBtn" class="button secondary">Previous</button>
+                    <button type="button" id="biometricNextBtn" class="button">Next</button>
+                </div>
+            </div>
+            
+            <!-- Step 3: Property Details -->
+            <div id="propertySection" class="form-section" style="display: none;">
+                <h2>Step 3: Property Details</h2>
+                
+                <div class="form-group">
+                    <label for="propertyType">Property Type</label>
+                    <select id="propertyType" name="propertyType" required>
+                        <option value="">Select Property Type</option>
+                        <option value="residential">Residential</option>
+                        <option value="commercial">Commercial</option>
+                        <option value="agricultural">Agricultural</option>
+                        <option value="industrial">Industrial</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="propertyAddress">Property Address</label>
+                    <textarea id="propertyAddress" name="propertyAddress" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="surveyNumber">Survey Number</label>
+                    <input type="text" id="surveyNumber" name="surveyNumber" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="landArea">Land Area (in sq. ft.)</label>
+                    <input type="text" id="landArea" name="landArea" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="boundaryDetails">Boundary Details</label>
+                    <textarea id="boundaryDetails" name="boundaryDetails" required></textarea>
+                </div>
+                
+                <div class="form-navigation">
+                    <button type="button" id="propertyPrevBtn" class="button secondary">Previous</button>
+                    <button type="button" id="propertyNextBtn" class="button">Next</button>
+                </div>
+            </div>
+            
+            <!-- Step 4: Verification -->
+            <div id="verificationSection" class="form-section" style="display: none;">
+                <h2>Step 4: Verification</h2>
+                
+                <!-- Video Recording -->
+                <div class="form-group">
+                    <h3>Video Verification</h3>
+                    
+                    <div class="video-recording-container">
+                        <div class="form-group">
+                            <label>Date and Time</label>
+                            <div id="datetime">-</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>GPS Location</label>
+                            <div id="gpsCoordinates">-</div>
+                            <div id="gpsAddress">-</div>
+                            <div id="locationStatus" class="location-status">Awaiting location</div>
+                        </div>
+                        
+                        <div class="video-container" style="margin: 15px 0;">
+                            <video id="videoPreview" style="width: 100%; max-width: 500px; border: 1px solid #ccc; display: none;" autoplay muted></video>
+                            <video id="recordedVideo" style="width: 100%; max-width: 500px; border: 1px solid #ccc; display: none;"></video>
+                            <div id="videoStatus" class="video-status">Ready to record</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <button type="button" id="startRecordBtn" class="button">Start Recording</button>
+                            <button type="button" id="stopRecordBtn" class="button secondary" disabled>Stop Recording</button>
+                            <span id="recordingIndicator" class="recording-indicator" style="display: none;"></span>
+                            <span id="recordingTimer">00:00</span>
+                        </div>
+                        
+                        <div class="sentiment-analysis">
+                            <h4>Sentiment Analysis</h4>
                             
-                            // Simplify expressions into 4 categories
-                            const happy = expressions.happy;
-                            const sad = expressions.sad;
-                            const angry = expressions.angry;
-                            const neutral = expressions.neutral;
+                            <div class="form-group">
+                                <label class="sentiment-label">
+                                    <span>Happy</span>
+                                    <span id="happyValue">0%</span>
+                                </label>
+                                <div class="sentiment-bar">
+                                    <div id="happyFill" class="sentiment-fill happy-fill" style="width: 0%;"></div>
+                                </div>
+                            </div>
                             
-                            emotionData.happy.push(happy);
-                            emotionData.sad.push(sad);
-                            emotionData.angry.push(angry);
-                            emotionData.neutral.push(neutral);
+                            <div class="form-group">
+                                <label class="sentiment-label">
+                                    <span>Neutral</span>
+                                    <span id="neutralValue">0%</span>
+                                </label>
+                                <div class="sentiment-bar">
+                                    <div id="neutralFill" class="sentiment-fill neutral-fill" style="width: 0%;"></div>
+                                </div>
+                            </div>
                             
-                            // Update sentiment UI
-                            updateSentimentUI();
-                        }
+                            <div class="form-group">
+                                <label class="sentiment-label">
+                                    <span>Sad</span>
+                                    <span id="sadValue">0%</span>
+                                </label>
+                                <div class="sentiment-bar">
+                                    <div id="sadFill" class="sentiment-fill sad-fill" style="width: 0%;"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="sentiment-label">
+                                    <span>Angry</span>
+                                    <span id="angryValue">0%</span>
+                                </label>
+                                <div class="sentiment-bar">
+                                    <div id="angryFill" class="sentiment-fill angry-fill" style="width: 0%;"></div>
+                                </div>
+                            </div>
+                            
+                            <div id="sentimentSummary" class="sentiment-summary">No data available</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-navigation">
+                    <button type="button" id="verificationPrevBtn" class="button secondary">Previous</button>
+                    <button type="button" id="verificationNextBtn" class="button">Next</button>
+                </div>
+            </div>
+            
+            <!-- Step 5: Submit -->
+            <div id="submissionSection" class="form-section" style="display: none;">
+                <h2>Step 5: Final Submission</h2>
+                
+                <!-- Consent Tabs -->
+                <div class="form-group">
+                    <h3>Terms and Conditions</h3>
+                    
+                    <div class="consent-tabs">
+                        <div class="consent-tab active" data-tab="terms">Terms</div>
+                        <div class="consent-tab" data-tab="privacy">Privacy</div>
+                        <div class="consent-tab" data-tab="declaration">Declaration</div>
+                    </div>
+                    
+                    <div class="consent-content active" id="termsContent">
+                        <p>By submitting this form, you agree to the following terms and conditions:</p>
+                        <ul>
+                            <li>All information provided is true and accurate.</li>
+                            <li>You have legal rights to register this property.</li>
+                            <li>You consent to verification of your identity and property details.</li>
+                            <li>You agree to pay all applicable fees and taxes.</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="consent-content" id="privacyContent">
+                        <p>We collect and process your personal data in accordance with our privacy policy:</p>
+                        <ul>
+                            <li>Your personal information will be used for property registration purposes only.</li>
+                            <li>Biometric data will be stored securely and used only for verification.</li>
+                            <li>Your data may be shared with relevant government departments.</li>
+                            <li>You have the right to access, correct, or delete your personal data.</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="consent-content" id="declarationContent">
+                        <p>I hereby declare that:</p>
+                        <ul>
+                            <li>I am the legal owner or authorized representative of the property.</li>
+                            <li>All documents submitted are authentic and valid.</li>
+                            <li>I have paid all dues and taxes related to the property.</li>
+                            <li>There are no pending legal disputes regarding the property.</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Signature -->
+                <div class="form-group">
+                    <h3>Digital Signature</h3>
+                    
+                    <div class="signature-container">
+                        <p>Please sign below to complete your registration:</p>
+                        <canvas id="signatureCanvas" class="signature-pad"></canvas>
+                        <button type="button" id="clearSignature" class="button secondary">Clear Signature</button>
+                    </div>
+                </div>
+                
+                <!-- Final Confirmation -->
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="finalConfirmation" required>
+                        I confirm that all information provided is true and accurate, and I agree to the terms and conditions.
+                    </label>
+                </div>
+                
+                <div class="form-navigation">
+                    <button type="button" id="submissionPrevBtn" class="button secondary">Previous</button>
+                    <button type="submit" class="button">Submit Registration</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Form Navigation Controls
+        document.addEventListener('DOMContentLoaded', function() {
+            // Step navigation
+            const sections = ['identitySection', 'biometricSection', 'propertySection', 'verificationSection', 'submissionSection'];
+            const steps = ['step1', 'step2', 'step3', 'step4', 'step5'];
+            let currentStep = 0;
+            
+            // Update progress bar
+            function updateProgress() {
+                const progress = (currentStep / (sections.length - 1)) * 100;
+                document.getElementById('progressBarFill').style.width = progress + '%';
+                
+                // Update steps
+                steps.forEach((step, index) => {
+                    const stepElement = document.getElementById(step);
+                    if (index < currentStep) {
+                        stepElement.classList.remove('active');
+                        stepElement.classList.add('completed');
+                    } else if (index === currentStep) {
+                        stepElement.classList.add('active');
+                        stepElement.classList.remove('completed');
+                    } else {
+                        stepElement.classList.remove('active');
+                        stepElement.classList.remove('completed');
+                    }
+                });
+            }
+            
+            // Show section
+            function showSection(index) {
+                sections.forEach((sectionId, i) => {
+                    document.getElementById(sectionId).style.display = i === index ? 'block' : 'none';
+                });
+                currentStep = index;
+                updateProgress();
+                window.scrollTo(0, 0);
+            }
+            
+            // Next buttons
+            document.getElementById('identityNextBtn').addEventListener('click', () => showSection(1));
+            document.getElementById('biometricNextBtn').addEventListener('click', () => showSection(2));
+            document.getElementById('propertyNextBtn').addEventListener('click', () => showSection(3));
+            document.getElementById('verificationNextBtn').addEventListener('click', () => showSection(4));
+            
+            // Previous buttons
+            document.getElementById('biometricPrevBtn').addEventListener('click', () => showSection(0));
+            document.getElementById('propertyPrevBtn').addEventListener('click', () => showSection(1));
+            document.getElementById('verificationPrevBtn').addEventListener('click', () => showSection(2));
+            document.getElementById('submissionPrevBtn').addEventListener('click', () => showSection(3));
+            
+            // Consent tabs functionality
+            const consentTabs = document.querySelectorAll('.consent-tab');
+            consentTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs and contents
+                    document.querySelectorAll('.consent-tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.consent-content').forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to selected tab and content
+                    this.classList.ad
+                    // Continuation of the script section...
+
+                    // Add active class to selected tab and content
+                    this.classList.add('active');
+                    document.getElementById(this.getAttribute('data-tab') + 'Content').classList.add('active');
+                });
+            });
+            
+            // Aadhaar Verification
+            document.getElementById('captureAadhaarBtn').addEventListener('click', function() {
+                const captureInterface = document.getElementById('aadhaarCaptureInterface');
+                captureInterface.style.display = 'block';
+                this.disabled = true;
+                
+                // Set up camera
+                const video = document.getElementById('aadhaarVideo');
+                const captureBtn = document.getElementById('aadhaarCaptureBtn');
+                
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(stream => {
+                        video.srcObject = stream;
+                        captureBtn.disabled = false;
+                    })
+                    .catch(err => {
+                        console.error('Camera access error:', err);
+                        alert('Unable to access camera. Please ensure you have given permission.');
                     });
-                }
-            }
-        }, 100);
-    }
-    
-    // Stop face detection
-    function stopFaceDetection() {
-        if (faceDetectionInterval) {
-            clearInterval(faceDetectionInterval);
-        }
-    }
-    
-    // Update sentiment UI based on collected emotion data
-    function updateSentimentUI() {
-        if (emotionData.happy.length === 0) return;
-        
-        // Calculate average for each emotion
-        const avgHappy = emotionData.happy.reduce((sum, val) => sum + val, 0) / emotionData.happy.length;
-        const avgSad = emotionData.sad.reduce((sum, val) => sum + val, 0) / emotionData.sad.length;
-        const avgAngry = emotionData.angry.reduce((sum, val) => sum + val, 0) / emotionData.angry.length;
-        const avgNeutral = emotionData.neutral.reduce((sum, val) => sum + val, 0) / emotionData.neutral.length;
-        
-        // Convert to percentages
-        const happyPercent = Math.round(avgHappy * 100);
-        const sadPercent = Math.round(avgSad * 100);
-        const angryPercent = Math.round(avgAngry * 100);
-        const neutralPercent = Math.round(avgNeutral * 100);
-        
-        // Update UI elements
-        document.getElementById("happyValue").textContent = `${happyPercent}%`;
-        document.getElementById("happyFill").style.width = `${happyPercent}%`;
-        
-        document.getElementById("sadValue").textContent = `${sadPercent}%`;
-        document.getElementById("sadFill").style.width = `${sadPercent}%`;
-        
-        document.getElementById("angryValue").textContent = `${angryPercent}%`;
-        document.getElementById("angryFill").style.width = `${angryPercent}%`;
-        
-        document.getElementById("neutralValue").textContent = `${neutralPercent}%`;
-        document.getElementById("neutralFill").style.width = `${neutralPercent}%`;
-        
-        // Determine overall sentiment
-        const summaryElement = document.getElementById("sentimentSummary");
-        let dominantEmotion = "neutral";
-        let highestValue = neutralPercent;
-        
-        if (happyPercent > highestValue) {
-            dominantEmotion = "happy";
-            highestValue = happyPercent;
-        }
-        if (sadPercent > highestValue) {
-            dominantEmotion = "sad";
-            highestValue = sadPercent;
-        }
-        if (angryPercent > highestValue) {
-            dominantEmotion = "angry";
-            highestValue = angryPercent;
-        }
-        
-        // Set summary text and style
-        summaryElement.className = "sentiment-summary";
-        
-        if (dominantEmotion === "happy") {
-            summaryElement.textContent = "Overall: Positive";
-            summaryElement.classList.add("positive-summary");
-        } else if (dominantEmotion === "neutral") {
-            summaryElement.textContent = "Overall: Neutral";
-            summaryElement.classList.add("neutral-summary");
-        } else {
-            summaryElement.textContent = "Overall: Negative";
-            summaryElement.classList.add("negative-summary");
-        }
-    }
-    
-    // Get final video sentiment
-    function getFinalSentiment() {
-        if (emotionData.happy.length === 0) {
-            return "Neutral"; // Default if no data
-        }
-        
-        const avgHappy = emotionData.happy.reduce((sum, val) => sum + val, 0) / emotionData.happy.length;
-        const avgSad = emotionData.sad.reduce((sum, val) => sum + val, 0) / emotionData.sad.length;
-        const avgAngry = emotionData.angry.reduce((sum, val) => sum + val, 0) / emotionData.angry.length;
-        const avgNeutral = emotionData.neutral.reduce((sum, val) => sum + val, 0) / emotionData.neutral.length;
-        
-        // Simple logic for overall sentiment
-        if (avgHappy > Math.max(avgSad, avgAngry, avgNeutral)) {
-            return "Positive";
-        } else if (avgSad > Math.max(avgHappy, avgAngry, avgNeutral) || 
-                 avgAngry > Math.max(avgHappy, avgSad, avgNeutral)) {
-            return "Negative";
-        } else {
-            return "Neutral";
-        }
-    }
-    
-    // Initialize video capture with location tracking
-    async function initVideoCapture() {
-        try {
-            // Request camera permissions
-            stream = await navigator.mediaDevices.getUserMedia({ 
-                video: {
-                    facingMode: "user",
-                    width: { ideal: 1280 },
-                    height: { ideal: 720 }
-                }, 
-                audio: true 
             });
             
-            videoElement.srcObject = stream;
-            console.log("Camera access granted");
-            
-            // Load face detection models
-            await initFaceAPI();
-            
-            // Start location tracking
-            startLocationTracking();
-            
-        } catch (error) {
-            console.error("Error accessing camera:", error);
-            alert("Camera access is required for video verification. Please allow camera access and reload the page.");
-        }
-    }
-    
-    // Initialize Aadhaar video capture
-    async function initAadhaarCapture() {
-        try {
-            // Request camera permissions
-            aadhaarStream = await navigator.mediaDevices.getUserMedia({ 
-                video: {
-                    facingMode: "environment",
-                    width: { ideal: 1280 },
-                    height: { ideal: 720 }
-                }
+            // Aadhaar Capture
+            document.getElementById('aadhaarCaptureBtn').addEventListener('click', function() {
+                const video = document.getElementById('aadhaarVideo');
+                const canvas = document.getElementById('aadhaarCanvas');
+                const context = canvas.getContext('2d');
+                
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                
+                // Show canvas and controls
+                canvas.style.display = 'block';
+                video.style.display = 'none';
+                document.getElementById('aadhaarConfirmBtn').style.display = 'inline-block';
+                document.getElementById('aadhaarRetakeBtn').style.display = 'inline-block';
+                this.style.display = 'none';
             });
             
-            aadhaarVideo.srcObject = aadhaarStream;
-            console.log("Aadhaar camera access granted");
-            
-        } catch (error) {
-            console.error("Error accessing camera for Aadhaar:", error);
-            alert("Camera access is required for Aadhaar verification. Please allow camera access and reload the page.");
-        }
-    }
-    
-    // Capture Aadhaar image
-    captureAadhaarBtn.addEventListener("click", async () => {
-        const context = aadhaarCanvas.getContext("2d");
-        aadhaarCanvas.width = aadhaarVideo.videoWidth;
-        aadhaarCanvas.height = aadhaarVideo.videoHeight;
-        
-        context.drawImage(aadhaarVideo, 0, 0, aadhaarCanvas.width, aadhaarCanvas.height);
-        capturedAadhaarImage = aadhaarCanvas.toDataURL("image/png");
-        
-        // Show processing indicator
-        processingIndicator.style.display = "block";
-        
-        // Update OCR step status
-        stepOCR.className = "step-icon step-complete";
-        stepOCR.textContent = "✓";
-        
-        // Simulate OCR processing
-        setTimeout(() => {
-            processAadhaarOCR(aadhaarCanvas);
-        }, 2000);
-    });
-    
-    // Reset Aadhaar capture
-    resetAadhaarBtn.addEventListener("click", () => {
-        const context = aadhaarCanvas.getContext("2d");
-        context.clearRect(0, 0, aadhaarCanvas.width, aadhaarCanvas.height);
-        aadhaarNumberInput.value = "";
-        capturedAadhaarImage = null;
-        
-        // Reset step indicators
-        stepOCR.className = "step-icon step-pending";
-        stepOCR.textContent = "1";
-        stepValidation.className = "step-icon step-pending";
-        stepValidation.textContent = "2";
-        stepVerification.className = "step-icon step-pending";
-        stepVerification.textContent = "3";
-        
-        // Reset status
-        aadhaarStatusElement.className = "aadhaar-status status-pending";
-        aadhaarStatusElement.textContent = "Awaiting Aadhaar verification";
-        
-        isAadhaarVerified = false;
-        submitButton.disabled = true;
-        aadhaarVerificationRequired.style.display = "block";
-    });
-    
-    // Process Aadhaar OCR
-    async function processAadhaarOCR(canvas) {
-        try {
-            // In a real application, this would use Tesseract.js or a backend OCR service
-            // For demo purposes, we'll simulate Aadhaar recognition
-            
-            // Simulate OCR processing delay
-            await new Promise(resolve => setTimeout(resolve, 2000));
-            
-            // Generate a fake but valid-looking Aadhaar number
-            // In a real app, this would come from the OCR result
-            const fakeAadhaarNum = Array(4).fill(0).map(() => 
-                Math.floor(Math.random() * 10000).toString().padStart(4, '0')
-            ).join(" ");
-            
-            aadhaarNumberInput.value = fakeAadhaarNum;
-            
-            // Update validation step status
-            stepValidation.className = "step-icon step-complete";
-            stepValidation.textContent = "✓";
-            
-            // Simulate validation delay
-            setTimeout(() => {
-                // Update verification step status
-                stepVerification.className = "step-icon step-complete";
-                stepVerification.textContent = "✓";
+            // Aadhaar Retake
+            document.getElementById('aadhaarRetakeBtn').addEventListener('click', function() {
+                const video = document.getElementById('aadhaarVideo');
+                const canvas = document.getElementById('aadhaarCanvas');
                 
-                // Update verification status
-                aadhaarStatusElement.className = "aadhaar-status status-verified";
-                aadhaarStatusElement.textContent = "Aadhaar verified successfully";
+                canvas.style.display = 'none';
+                video.style.display = 'block';
+                document.getElementById('aadhaarCaptureBtn').style.display = 'inline-block';
+                document.getElementById('aadhaarConfirmBtn').style.display = 'none';
+                this.style.display = 'none';
+            });
+            
+            // Aadhaar Confirm
+            document.getElementById('aadhaarConfirmBtn').addEventListener('click', function() {
+                // Process the Aadhaar image
+                document.getElementById('processingIndicator').style.display = 'block';
                 
-                // Hide processing indicator
-                processingIndicator.style.display = "none";
+                // Simulate OCR processing
+                setTimeout(() => {
+                    document.getElementById('stepOCR').className = 'verification-step step-complete';
+                    
+                    // Simulate validation
+                    setTimeout(() => {
+                        document.getElementById('stepValidation').className = 'verification-step step-complete';
+                        
+                        // Simulate verification
+                        setTimeout(() => {
+                            document.getElementById('stepVerification').className = 'verification-step step-complete';
+                            document.getElementById('aadhaarNumber').value = 'XXXX XXXX 1234';
+                            document.getElementById('aadhaarStatus').className = 'aadhaar-status status-verified';
+                            document.getElementById('aadhaarStatus').textContent = 'Verified Successfully';
+                            document.getElementById('processingIndicator').style.display = 'none';
+                            
+                            // Close the camera
+                            const video = document.getElementById('aadhaarVideo');
+                            if (video.srcObject) {
+                                video.srcObject.getTracks().forEach(track => track.stop());
+                            }
+                            
+                            document.getElementById('aadhaarCaptureInterface').style.display = 'none';
+                            document.getElementById('captureAadhaarBtn').disabled = false;
+                        }, 1000);
+                    }, 1000);
+                }, 1000);
+            });
+            
+            // Reset Aadhaar
+            document.getElementById('resetAadhaarBtn').addEventListener('click', function() {
+                document.getElementById('aadhaarNumber').value = '';
+                document.getElementById('aadhaarStatus').className = 'aadhaar-status status-pending';
+                document.getElementById('aadhaarStatus').textContent = 'Awaiting Aadhaar verification';
+                document.getElementById('stepOCR').className = 'verification-step step-pending';
+                document.getElementById('stepValidation').className = 'verification-step step-pending';
+                document.getElementById('stepVerification').className = 'verification-step step-pending';
                 
-                // Set verification as complete
-                isAadhaarVerified = true;
+                // Close the camera if open
+                const video = document.getElementById('aadhaarVideo');
+                if (video.srcObject) {
+                    video.srcObject.getTracks().forEach(track => track.stop());
+                }
                 
-                // Enable submit button if verification is complete
-                submitButton.disabled = false;
-                aadhaarVerificationRequired.style.display = "none";
+                document.getElementById('aadhaarCaptureInterface').style.display = 'none';
+                document.getElementById('captureAadhaarBtn').disabled = false;
+            });
+            
+            // Fingerprint Scan
+            document.getElementById('scanFingerprintBtn').addEventListener('click', function() {
+                const fingerprintStatus = document.getElementById('fingerprintStatus');
+                fingerprintStatus.textContent = 'Scanning...';
                 
-            }, 1500);
+                // Simulate scanning process
+                setTimeout(() => {
+                    document.getElementById('fingerprintQuality').value = '87%';
+                    fingerprintStatus.textContent = 'Scan complete. Quality: Good';
+                    fingerprintStatus.className = 'fingerprint-status status-verified';
+                }, 2000);
+            });
             
-        } catch (error) {
-            console.error("Error in Aadhaar OCR:", error);
-            
-            // Update step status to error
-            stepOCR.className = "step-icon step-error";
-            stepOCR.textContent = "✗";
-            
-            // Update verification status
-            aadhaarStatusElement.className = "aadhaar-status status-failed";
-            aadhaarStatusElement.textContent = "OCR failed. Please try again.";
-            
-            // Hide processing indicator
-            processingIndicator.style.display = "none";
-        }
-    }
-    
-    // Start tracking location
-    function startLocationTracking() {
-        // Update date/time
-        updateDateTime();
-        
-        // Request location permissions
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                savePosition,
-                handleLocationError,
-                { enableHighAccuracy: true }
-            );
-            
-            // Continuously update location
-            locationUpdateInterval = setInterval(() => {
-                navigator.geolocation.getCurrentPosition(
-                    savePosition,
-                    handleLocationError,
-                    { enableHighAccuracy: true }
-                );
+            // Face Authentication
+            document.getElementById('verifyFaceBtn').addEventListener('click', function() {
+                const faceAuthStatus = document.getElementById('faceAuthStatus');
+                faceAuthStatus.textContent = 'Verifying...';
                 
-                // Update date/time
-                updateDateTime();
-            }, 5000);
-        } else {
-            handleLocationError({ code: 0, message: "Geolocation not supported" });
-        }
-    }
-    
-    // Update date and time
-    function updateDateTime() {
-        const now = new Date();
-        datetimeElement.textContent = now.toLocaleString();
-    }
-    
-    // Save position data
-    function savePosition(position) {
-        currentPosition = position;
-        const { latitude, longitude } = position.coords;
-        
-        // Update UI with coordinates
-        gpsCoordinatesElement.textContent = `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
-        
-        // Reverse geocode to get address
-        reverseGeocode(latitude, longitude);
-        
-        // Update status UI
-        locationStatusElement.innerHTML = `
-            <div class="location-status status-success">Location detected successfully</div>
-        `;
-    }
-    
-    // Handle location errors
-    function handleLocationError(error) {
-        console.error("Location error:", error);
-        
-        let errorMessage = "Unknown error occurred";
-        switch(error.code) {
-            case 1:
-                errorMessage = "Location permission denied";
-                break;
-            case 2:
-                errorMessage = "Position unavailable";
-                break;
-            case 3:
-                errorMessage = "Location request timed out";
-                break;
-        }
-        
-        // Update UI with error
-        gpsCoordinatesElement.textContent = "Error detecting location";
-        gpsAddressElement.textContent = errorMessage;
-        
-        // Update status UI
-        locationStatusElement.innerHTML = `
-            <div class="location-status status-error">${errorMessage}</div>
-        `;
-    }
-    
-    // Reverse geocode coordinates to address
-    function reverseGeocode(lat, lng) {
-        // In a real app, this would use a geocoding service like Google Maps API
-        // For demo purposes, we'll simulate address resolution
-        
-        setTimeout(() => {
-            // Generate a fake but realistic-looking address
-            const addresses = [
-                "123 Main Street, Bengaluru, Karnataka 560001",
-                "45 Park Avenue, Mumbai, Maharashtra 400001",
-                "78 Rajpath Road, New Delhi, Delhi 110001",
-                "22 Beach Road, Chennai, Tamil Nadu 600001",
-                "56 Salt Lake, Kolkata, West Bengal 700001",
-                "90 MG Road, Pune, Maharashtra 411001"
-            ];
+                // Animate face match indicator
+                const matchIndicator = document.getElementById('faceMatchIndicator');
+                const matchPercentage = document.getElementById('faceMatchPercentage');
+                let width = 0;
+                const interval = setInterval(() => {
+                    if (width >= 95) {
+                        clearInterval(interval);
+                        faceAuthStatus.textContent = 'Face verified successfully';
+                        faceAuthStatus.className = 'face-auth-status status-verified';
+                    } else {
+                        width += 5;
+                        matchIndicator.style.width = width + '%';
+                        matchPercentage.textContent = width + '%';
+                    }
+                }, 100);
+            });
             
-            const randomAddress = addresses[Math.floor(Math.random() * addresses.length)];
-            gpsAddressElement.textContent = randomAddress;
-        }, 1000);
-    }
-    
-    // Start recording
-    startRecordBtn.addEventListener("click", () => {
-       if (stream) {
-           // Reset emotion data
-           emotionData = {
-               happy: [],
-               neutral: [],
-               sad: [],
-               angry: []
-           };
-           
-           // Start recording
-           mediaRecorder = new MediaRecorder(stream);
-           recordedChunks = [];
-           
-           mediaRecorder.ondataavailable = function(e) {
-               if (e.data.size > 0) {
-                   recordedChunks.push(e.data);
-               }
-           };
-           
-           mediaRecorder.onstop = function() {
-               // Process recorded video
-               const blob = new Blob(recordedChunks, { type: 'video/webm' });
-               const videoURL = URL.createObjectURL(blob);
-               
-               // In a real app, you would upload the video to a server
-               console.log("Video recorded", videoURL);
-               
-               // Get final sentiment
-               const finalSentiment = getFinalSentiment();
-               console.log("Final video sentiment:", finalSentiment);
-           };
-           
-           // Start recording
-           mediaRecorder.start();
-           
-           // Update UI
-           startRecordBtn.disabled = true;
-           stopRecordBtn.disabled = false;
-           recordingIndicator.style.display = "inline";
-           
-           // Start recording timer
-           recordingTime = 0;
-           recordingTimer.textContent = formatTime(recordingTime);
-           timerInterval = setInterval(() => {
-               recordingTime++;
-               recordingTimer.textContent = formatTime(recordingTime);
-           }, 1000);
-           
-           // Start face detection
-           startFaceDetection();
-           
-       } else {
-           alert("Camera access required before recording");
-       }
-    });
-    
-    // Stop recording
-    stopRecordBtn.addEventListener("click", () => {
-        if (mediaRecorder && mediaRecorder.state === "recording") {
-            // Stop recording
-            mediaRecorder.stop();
+            // Video recording
+            let mediaRecorder;
+            let recordedChunks = [];
+            let recordingInterval;
+            let recordingSeconds = 0;
             
-            // Stop timer
-            clearInterval(timerInterval);
+            document.getElementById('startRecordBtn').addEventListener('click', function() {
+                const videoPreview = document.getElementById('videoPreview');
+                const recordedVideo = document.getElementById('recordedVideo');
+                const videoStatus = document.getElementById('videoStatus');
+                const recordingIndicator = document.getElementById('recordingIndicator');
+                const recordingTimer = document.getElementById('recordingTimer');
+                
+                videoPreview.style.display = 'block';
+                recordedVideo.style.display = 'none';
+                videoStatus.textContent = 'Initializing camera...';
+                
+                // Set datetime
+                const now = new Date();
+                document.getElementById('datetime').textContent = now.toLocaleString();
+                
+                // Set GPS location (simulated)
+                setTimeout(() => {
+                    document.getElementById('gpsCoordinates').textContent = '12.9716° N, 77.5946° E';
+                    document.getElementById('gpsAddress').textContent = 'Bangalore, Karnataka, India';
+                    document.getElementById('locationStatus').textContent = 'Location verified';
+                    document.getElementById('locationStatus').className = 'location-status status-verified';
+                }, 1000);
+                
+                // Start camera
+                navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+                    .then(stream => {
+                        videoPreview.srcObject = stream;
+                        mediaRecorder = new MediaRecorder(stream);
+                        
+                        mediaRecorder.ondataavailable = function(e) {
+                            if (e.data.size > 0) {
+                                recordedChunks.push(e.data);
+                            }
+                        };
+                        
+                        mediaRecorder.onstop = function() {
+                            const blob = new Blob(recordedChunks, { type: 'video/webm' });
+                            recordedVideo.src = URL.createObjectURL(blob);
+                            recordedVideo.style.display = 'block';
+                            videoPreview.style.display = 'none';
+                            
+                            // Stop tracks
+                            videoPreview.srcObject.getTracks().forEach(track => track.stop());
+                            
+                            // Simulate sentiment analysis
+                            simulateSentimentAnalysis();
+                        };
+                        
+                        videoStatus.textContent = 'Ready to record';
+                        document.getElementById('startRecordBtn').disabled = true;
+                        document.getElementById('stopRecordBtn').disabled = false;
+                    })
+                    .catch(err => {
+                        console.error('Camera access error:', err);
+                        alert('Unable to access camera. Please ensure you have given permission.');
+                    });
+            });
             
-            // Update UI
-            startRecordBtn.disabled = false;
-            stopRecordBtn.disabled = true;
-            recordingIndicator.style.display = "none";
-            
-            // Stop face detection
-            stopFaceDetection();
-        }
-    });
-    
-    // Format time for display
-    function formatTime(seconds) {
-        const minutes = Math.floor(seconds / 60);
-        const remainingSeconds = seconds % 60;
-        return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
-    }
-    
-    // Form submission handler
-    form.addEventListener("submit", function(event) {
-        event.preventDefault();
-        
-        // Check if Aadhaar is verified
-        if (!isAadhaarVerified) {
-            alert("Please complete Aadhaar verification before submitting");
-            return;
-        }
-        
-        // In a real application, you would submit the form data to a server
-        // For demo purposes, we'll just show a confirmation message
-        
-        // Get form data
-        const formData = {
-            userRole: document.getElementById("userRole").value,
-            ownerName: document.getElementById("ownerName").value,
-            landLocation: document.getElementById("landLocation").value,
-            landSize: document.getElementById("landSize").value,
-            feedback: document.getElementById("feedback").value,
-            aadhaarNumber: aadhaarNumberInput.value,
-            gpsCoordinates: gpsCoordinatesElement.textContent,
-            gpsAddress: gpsAddressElement.textContent,
-            timestamp: datetimeElement.textContent,
-            videoSentiment: getFinalSentiment(),
-            // In a real app, you would include the video and signature as well
-        };
-        
-        console.log("Form submitted:", formData);
-        
-        // Show confirmation message
-        message.classList.remove("hidden");
-        form.reset();
-        clearCanvas();
-        
-        // Reset Aadhaar verification
-        resetAadhaarBtn.click();
-    });
-    
-    // Scroll to form when Get Started is clicked
-    getStartedBtn.addEventListener("click", function(event) {
-        event.preventDefault();
-        const registrationForm = document.getElementById("registrationForm");
-        registrationForm.scrollIntoView({ behavior: "smooth" });
-    });
-    
-    // Initialize everything on page load
-    window.addEventListener("load", function() {
-        // Init video capture with face detection
-        initVideoCapture();
-        
-        // Init Aadhaar capture
-        initAadhaarCapture();
-    });
-    
-    // Text Sentiment Analysis (simulated for demo)
-    const feedbackInput = document.getElementById("feedback");
-    feedbackInput.addEventListener("blur", function() {
-        const text = feedbackInput.value.trim();
-        if (text) {
-            // In a real app, this would call a sentiment analysis API
-            // For demo purposes, we'll use a simple word-based approach
-            
-            const positiveWords = ["good", "great", "excellent", "happy", "satisfied", "best", "fantastic", "superb"];
-            const negativeWords = ["bad", "poor", "terrible", "worst", "waste", "disappointed", "horrible", "awful"];
-            
-            let positiveCount = 0;
-            let negativeCount = 0;
-            
-            const words = text.toLowerCase().split(/\s+/);
-            
-            words.forEach(word => {
-                if (positiveWords.includes(word)) {
-                    positiveCount++;
-                } else if (negativeWords.includes(word)) {
-                    negativeCount++;
+            document.getElementById('stopRecordBtn').addEventListener('click', function() {
+                if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                    mediaRecorder.stop();
+                    document.getElementById('recordingIndicator').style.display = 'none';
+                    document.getElementById('videoStatus').textContent = 'Recording complete';
+                    this.disabled = true;
+                    document.getElementById('startRecordBtn').disabled = false;
+                    
+                    // Clear recording timer
+                    clearInterval(recordingInterval);
+                    recordingSeconds = 0;
                 }
             });
             
-            let sentiment = "Neutral";
-            if (positiveCount > negativeCount) {
-                sentiment = "Positive";
-            } else if (negativeCount > positiveCount) {
-                sentiment = "Negative";
+            function startRecording() {
+                recordedChunks = [];
+                recordingSeconds = 0;
+                document.getElementById('recordingTimer').textContent = '00:00';
+                document.getElementById('recordingIndicator').style.display = 'inline-block';
+                document.getElementById('videoStatus').textContent = 'Recording...';
+                
+                mediaRecorder.start(1000);
+                
+                // Update recording timer
+                recordingInterval = setInterval(() => {
+                    recordingSeconds++;
+                    const minutes = Math.floor(recordingSeconds / 60);
+                    const seconds = recordingSeconds % 60;
+                    document.getElementById('recordingTimer').textContent = 
+                        `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                }, 1000);
             }
             
-            console.log("Text sentiment:", sentiment);
-        }
-    });
-    
-    // Clean up resources on page unload
-    window.addEventListener("beforeunload", function() {
-        // Stop location tracking
-        if (locationUpdateInterval) {
-            clearInterval(locationUpdateInterval);
-        }
-        
-        // Stop face detection
-        stopFaceDetection();
-        
-        // Stop video recording if active
-        if (mediaRecorder && mediaRecorder.state === "recording") {
-            mediaRecorder.stop();
-        }
-        
-        // Release camera streams
-        if (stream) {
-            stream.getTracks().forEach(track => track.stop());
-        }
-        
-        if (aadhaarStream) {
-            aadhaarStream.getTracks().forEach(track => track.stop());
-        }
-    });
-</script>
+            function simulateSentimentAnalysis() {
+                // Simulate sentiment values
+                const happyValue = Math.floor(Math.random() * 40) + 60; // 60-100%
+                const neutralValue = Math.floor(Math.random() * 30) + 10; // 10-40%
+                const sadValue = Math.floor(Math.random() * 20); // 0-20%
+                const angryValue = Math.floor(Math.random() * 10); // 0-10%
+                
+                // Update sentiment bars
+                document.getElementById('happyFill').style.width = happyValue + '%';
+                document.getElementById('neutralFill').style.width = neutralValue + '%';
+                document.getElementById('sadFill').style.width = sadValue + '%';
+                document.getElementById('angryFill').style.width = angryValue + '%';
+                
+                // Update sentiment values
+                document.getElementById('happyValue').textContent = happyValue + '%';
+                document.getElementById('neutralValue').textContent = neutralValue + '%';
+                document.getElementById('sadValue').textContent = sadValue + '%';
+                document.getElementById('angryValue').textContent = angryValue + '%';
+                
+                // Update sentiment summary
+                const sentimentSummary = document.getElementById('sentimentSummary');
+                sentimentSummary.textContent = 'Positive sentiment detected. Verification successful.';
+                sentimentSummary.className = 'sentiment-summary positive-summary';
+            }
+            
+            // Signature pad
+            const signatureCanvas = document.getElementById('signatureCanvas');
+            const signatureCtx = signatureCanvas.getContext('2d');
+            let isDrawing = false;
+            
+            // Set canvas size
+            signatureCanvas.width = signatureCanvas.offsetWidth;
+            signatureCanvas.height = 150;
+            
+            // Initialize signature pad
+            signatureCtx.lineWidth = 2;
+            signatureCtx.lineCap = 'round';
+            signatureCtx.strokeStyle = '#000';
+            
+            // Event listeners for signature pad
+            signatureCanvas.addEventListener('mousedown', startDrawing);
+            signatureCanvas.addEventListener('mousemove', draw);
+            signatureCanvas.addEventListener('mouseup', stopDrawing);
+            signatureCanvas.addEventListener('mouseout', stopDrawing);
+            
+            // Touch events
+            signatureCanvas.addEventListener('touchstart', startDrawingTouch);
+            signatureCanvas.addEventListener('touchmove', drawTouch);
+            signatureCanvas.addEventListener('touchend', stopDrawing);
+            
+            function startDrawing(e) {
+                isDrawing = true;
+                signatureCtx.beginPath();
+                signatureCtx.moveTo(e.offsetX, e.offsetY);
+            }
+            
+            function draw(e) {
+                if (!isDrawing) return;
+                signatureCtx.lineTo(e.offsetX, e.offsetY);
+                signatureCtx.stroke();
+            }
+            
+            function startDrawingTouch(e) {
+                e.preventDefault();
+                isDrawing = true;
+                const rect = signatureCanvas.getBoundingClientRect();
+                const touch = e.touches[0];
+                const x = touch.clientX - rect.left;
+                const y = touch.clientY - rect.top;
+                signatureCtx.beginPath();
+                signatureCtx.moveTo(x, y);
+            }
+            
+            function drawTouch(e) {
+                if (!isDrawing) return;
+                e.preventDefault();
+                const rect = signatureCanvas.getBoundingClientRect();
+                const touch = e.touches[0];
+                const x = touch.clientX - rect.left;
+                const y = touch.clientY - rect.top;
+                signatureCtx.lineTo(x, y);
+                signatureCtx.stroke();
+            }
+            
+            function stopDrawing() {
+                isDrawing = false;
+            }
+            
+            // Clear signature
+            document.getElementById('clearSignature').addEventListener('click', function() {
+                signatureCtx.clearRect(0, 0, signatureCanvas.width, signatureCanvas.height);
+            });
+            
+            // Form submission
+            document.getElementById('landForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Form submitted successfully! Your registration will be processed shortly.');
+                // Here you would typically send the form data to a server
+            });
+            
+            // Initialize first section
+            showSection(0);
+        });
+    </script>
 </body>
 </html>
