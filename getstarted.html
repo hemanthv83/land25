@@ -86,44 +86,52 @@
             cursor: not-allowed;
         }
         
-        /* Progress Bar */
-        .progress-container {
-            margin-bottom: 30px;
-        }
-        
-        .progress-bar {
-            width: 100%;
-            background-color: #ecf0f1;
-            height: 10px;
-            border-radius: 5px;
-            margin-bottom: 15px;
-        }
-        
-        .progress-bar-fill {
-            height: 100%;
-            background-color: #3498db;
-            border-radius: 5px;
-            width: 0%;
-            transition: width 0.3s ease-in-out;
-        }
-        
-        .progress-steps {
-            display: flex;
-            justify-content: space-between;
-            position: relative;
-        }
-        
-        .progress-steps::before {
-            content: '';
-            position: absolute;
-            top: 15px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background-color: #ddd;
-            z-index: 1;
-        }
-        
+       /* Progress Bar */
+.progress-container {
+    margin-bottom: 30px;
+}
+
+.progress-bar {
+    width: 100%;
+    background-color: #ecf0f1;
+    height: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background-color: #3498db;
+    border-radius: 5px;
+    width: 0%;
+    transition: width 0.3s ease-in-out;
+}
+
+.progress-steps {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+}
+
+/* This is causing the line over your text */
+.progress-steps:first-of-type::before {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: #ddd;
+    z-index: 1;
+}
+
+/* Add this to make labels have a background */
+.step-label {
+    background-color: white;
+    padding: 0 5px;
+    position: relative;
+    z-index: 2;
+}
         .step {
             width: 30px;
             height: 30px;
@@ -154,7 +162,7 @@
             text-align: center;
         }
         
-        /* Verification Elements */
+        
         .verification-steps {
             display: flex;
             justify-content: space-between;
@@ -1195,6 +1203,216 @@
             // Initialize first section
             showSection(0);
         });
+        // Form Navigation Controls with Validation
+document.addEventListener('DOMContentLoaded', function() {
+    // Step navigation
+    const sections = ['identitySection', 'biometricSection', 'propertySection', 'verificationSection', 'submissionSection'];
+    const steps = ['step1', 'step2', 'step3', 'step4', 'step5'];
+    let currentStep = 0;
+    
+    // Update progress bar
+    function updateProgress() {
+        const progress = (currentStep / (sections.length - 1)) * 100;
+        document.getElementById('progressBarFill').style.width = progress + '%';
+        
+        // Update steps
+        steps.forEach((step, index) => {
+            const stepElement = document.getElementById(step);
+            if (index < currentStep) {
+                stepElement.classList.remove('active');
+                stepElement.classList.add('completed');
+            } else if (index === currentStep) {
+                stepElement.classList.add('active');
+                stepElement.classList.remove('completed');
+            } else {
+                stepElement.classList.remove('active');
+                stepElement.classList.remove('completed');
+            }
+        });
+    }
+    
+    // Show section
+    function showSection(index) {
+        sections.forEach((sectionId, i) => {
+            document.getElementById(sectionId).style.display = i === index ? 'block' : 'none';
+        });
+        currentStep = index;
+        updateProgress();
+        window.scrollTo(0, 0);
+    }
+    
+    // Validate Identity Section
+    function validateIdentitySection() {
+        const fullName = document.getElementById('fullName').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const mobile = document.getElementById('mobile').value.trim();
+        const dob = document.getElementById('dob').value.trim();
+        const address = document.getElementById('address').value.trim();
+        
+        if (!fullName) {
+            alert('Please enter your full name');
+            return false;
+        }
+        if (!email) {
+            alert('Please enter your email address');
+            return false;
+        }
+        if (!mobile) {
+            alert('Please enter your mobile number');
+            return false;
+        }
+        if (!dob) {
+            alert('Please enter your date of birth');
+            return false;
+        }
+        if (!address) {
+            alert('Please enter your permanent address');
+            return false;
+        }
+        
+        return true;
+    }
+    
+    // Validate Biometric Section
+    function validateBiometricSection() {
+        const aadhaarNumber = document.getElementById('aadhaarNumber').value.trim();
+        const fingerprintQuality = document.getElementById('fingerprintQuality').value.trim();
+        const faceMatchPercentage = document.getElementById('faceMatchPercentage').textContent;
+        
+        if (!aadhaarNumber) {
+            alert('Please complete Aadhaar verification');
+            return false;
+        }
+        if (!fingerprintQuality) {
+            alert('Please complete fingerprint verification');
+            return false;
+        }
+        if (faceMatchPercentage === '0%') {
+            alert('Please complete face verification');
+            return false;
+        }
+        
+        return true;
+    }
+    
+    // Validate Property Section
+    function validatePropertySection() {
+        const propertyType = document.getElementById('propertyType').value;
+        const propertyAddress = document.getElementById('propertyAddress').value.trim();
+        const surveyNumber = document.getElementById('surveyNumber').value.trim();
+        const landArea = document.getElementById('landArea').value.trim();
+        const boundaryDetails = document.getElementById('boundaryDetails').value.trim();
+        
+        if (!propertyType) {
+            alert('Please select a property type');
+            return false;
+        }
+        if (!propertyAddress) {
+            alert('Please enter the property address');
+            return false;
+        }
+        if (!surveyNumber) {
+            alert('Please enter the survey number');
+            return false;
+        }
+        if (!landArea) {
+            alert('Please enter the land area');
+            return false;
+        }
+        if (!boundaryDetails) {
+            alert('Please enter boundary details');
+            return false;
+        }
+        
+        return true;
+    }
+    
+    // Validate Verification Section
+    function validateVerificationSection() {
+        const recordedVideo = document.getElementById('recordedVideo');
+        const sentimentSummary = document.getElementById('sentimentSummary').textContent;
+        
+        if (recordedVideo.style.display !== 'block') {
+            alert('Please complete the video recording');
+            return false;
+        }
+        if (sentimentSummary === 'No data available') {
+            alert('Please complete the verification process');
+            return false;
+        }
+        
+        return true;
+    }
+    
+    // Validate Submission Section
+    function validateSubmissionSection() {
+        const finalConfirmation = document.getElementById('finalConfirmation').checked;
+        const signatureCanvas = document.getElementById('signatureCanvas');
+        const signatureCtx = signatureCanvas.getContext('2d');
+        
+        // Check if signature exists by getting image data
+        const imageData = signatureCtx.getImageData(0, 0, signatureCanvas.width, signatureCanvas.height).data;
+        const hasSignature = imageData.some(channel => channel !== 0);
+        
+        if (!hasSignature) {
+            alert('Please provide your signature');
+            return false;
+        }
+        if (!finalConfirmation) {
+            alert('Please confirm that all information is accurate by checking the box');
+            return false;
+        }
+        
+        return true;
+    }
+    
+    // Next buttons with validation
+    document.getElementById('identityNextBtn').addEventListener('click', function() {
+        if (validateIdentitySection()) {
+            showSection(1);
+        }
+    });
+    
+    document.getElementById('biometricNextBtn').addEventListener('click', function() {
+        if (validateBiometricSection()) {
+            showSection(2);
+        }
+    });
+    
+    document.getElementById('propertyNextBtn').addEventListener('click', function() {
+        if (validatePropertySection()) {
+            showSection(3);
+        }
+    });
+    
+    document.getElementById('verificationNextBtn').addEventListener('click', function() {
+        if (validateVerificationSection()) {
+            showSection(4);
+        }
+    });
+    
+    // Previous buttons (no validation needed to go back)
+    document.getElementById('biometricPrevBtn').addEventListener('click', () => showSection(0));
+    document.getElementById('propertyPrevBtn').addEventListener('click', () => showSection(1));
+    document.getElementById('verificationPrevBtn').addEventListener('click', () => showSection(2));
+    document.getElementById('submissionPrevBtn').addEventListener('click', () => showSection(3));
+    
+    // Form submission with validation
+    document.getElementById('landForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (validateSubmissionSection()) {
+            alert('Form submitted successfully! Your registration will be processed shortly.');
+            // Here you would typically send the form data to a server
+        }
+    });
+
+    // The rest of your existing code for consent tabs, Aadhaar verification, fingerprint scanning, etc.
+    // ...
+
+    // Initialize first section
+    showSection(0);
+});
     </script>
+    
 </body>
 </html>
